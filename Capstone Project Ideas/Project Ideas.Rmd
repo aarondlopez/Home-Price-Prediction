@@ -26,4 +26,4 @@ output: html_document
 
 * Data: <http://data.sanjoseca.gov/home>
 
-## Idea #3: tbd
+## Idea #3: Test Idea
