@@ -9,6 +9,34 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## #1: Clean up brand names
+## 1: Clean up brand names
 
+```{r}
+
+```
+
+## 2: Separate produce code and number
+
+```{r}
+refine_original_2 <- separate(refine_original, 'Product code / number', c("product_code", "product_number"), sep = "-")
+View(refine_original_2)
+```
+
+## 3: Add product categories
+
+```{r}
+
+```
+
+## 4: Add full address for geocoding
+
+```{r}
+
+```
+
+## 5: Create dummy variables for company and product category
+
+```{r}
+
+```
 
