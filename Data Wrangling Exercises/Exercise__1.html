@@ -127,34 +127,47 @@ $(document).ready(function () {
 <h2>Load libraries and data</h2>
 <pre class="r"><code>library(dplyr)
 library(tidyr)
-refine_original_2 &lt;- read.csv(&quot;refine_original.csv&quot;)
-refine_original_2 &lt;- tbl_df(refine_original_2)</code></pre>
+refine_original &lt;- read.csv(&quot;refine_original.csv&quot;)
+refine_cleaning &lt;- tbl_df(refine_original)</code></pre>
 </div>
 <div id="clean-up-brand-names" class="section level2">
 <h2>1: Clean up brand names</h2>
-<pre class="r"><code>refine_original_2$company[1:6] = &quot;philips&quot;
-refine_original_2$company[7:13] = &quot;akzo&quot;
-refine_original_2$company[14:16] = &quot;philips&quot;
-refine_original_2$company[17:21] = &quot;van houten&quot;
-refine_original_2$company[22:25] = &quot;unilever&quot;</code></pre>
+<pre class="r"><code>refine_cleaning$company[1:6] = &quot;philips&quot;
+refine_cleaning$company[7:13] = &quot;akzo&quot;
+refine_cleaning$company[14:16] = &quot;philips&quot;
+refine_cleaning$company[17:21] = &quot;van houten&quot;
+refine_cleaning$company[22:25] = &quot;unilever&quot;</code></pre>
 </div>
 <div id="separate-produce-code-and-number" class="section level2">
 <h2>2: Separate produce code and number</h2>
-<pre class="r"><code>refine_original_2 &lt;- separate(refine_original_2, &quot;Product.code...number&quot;, c(&quot;product_code&quot;, &quot;product_number&quot;), sep = &quot;-&quot;)</code></pre>
+<pre class="r"><code>refine_cleaning &lt;- separate(refine_cleaning, &quot;Product.code...number&quot;, c(&quot;product_code&quot;, &quot;product_number&quot;), sep = &quot;-&quot;)</code></pre>
 </div>
 <div id="add-product-categories" class="section level2">
 <h2>3: Add product categories</h2>
 <pre class="r"><code>products &lt;- c(&quot;Smartphone&quot;, &quot;TV&quot;, &quot;Laptop&quot;, &quot;Tablet&quot;)
 product_code &lt;- c(&quot;p&quot;,&quot;v&quot;,&quot;x&quot;,&quot;q&quot;)
 product_df &lt;- data_frame(products, product_code)
-refine_originial_2 &lt;- left_join(refine_original_2, product_df, by=&quot;product_code&quot;)</code></pre>
+refine_cleaning &lt;- left_join(refine_cleaning, product_df, by=&quot;product_code&quot;)</code></pre>
 </div>
 <div id="add-full-address-for-geocoding" class="section level2">
 <h2>4: Add full address for geocoding</h2>
-<pre class="r"><code>refine_original_2 &lt;- unite(refine_original_2, full_address, address, city, country, sep = &quot;, &quot;, remove = FALSE)</code></pre>
+<pre class="r"><code>refine_cleaning &lt;- unite(refine_cleaning, full_address, address, city, country, sep = &quot;, &quot;, remove = FALSE)</code></pre>
 </div>
 <div id="create-dummy-variables-for-company-and-product-category" class="section level2">
 <h2>5: Create dummy variables for company and product category</h2>
+<pre class="r"><code>refine_cleaning &lt;- mutate(refine_cleaning, company_philips = as.numeric(company == 'philips'))
+refine_cleaning &lt;- mutate(refine_cleaning, company_akzo = as.numeric(company == 'akzo'))
+refine_cleaning &lt;- mutate(refine_cleaning, company_van_houten = as.numeric(company == 'van houten'))
+refine_cleaning &lt;- mutate(refine_cleaning, company_unilever = as.numeric(company == 'unilever'))
+refine_cleaning &lt;- mutate(refine_cleaning, product_smartphone = as.numeric(products == 'Smartphone'))
+refine_cleaning &lt;- mutate(refine_cleaning, product_tv = as.numeric(products == 'TV'))
+refine_cleaning &lt;- mutate(refine_cleaning, product_laptop = as.numeric(products == 'Laptop'))
+refine_cleaning &lt;- mutate(refine_cleaning, product_tablet = as.numeric(products == 'Tablet'))</code></pre>
+</div>
+<div id="submit-to-github-original-and-cleaned-up-.csv-files" class="section level2">
+<h2>6: Submit to github original and cleaned up .csv files</h2>
+<pre class="r"><code>refine_clean &lt;- refine_cleaning
+write.csv(refine_clean, file = &quot;refine_clean.csv&quot;)</code></pre>
 </div>
 
 

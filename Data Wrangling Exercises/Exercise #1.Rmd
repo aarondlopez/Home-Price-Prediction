@@ -10,8 +10,8 @@ output: html_document
 
 library(dplyr)
 library(tidyr)
-refine_original_2 <- read.csv("refine_original.csv")
-refine_original_2 <- tbl_df(refine_original_2)
+refine_original <- read.csv("refine_original.csv")
+refine_cleaning <- tbl_df(refine_original)
 
 ```
 
@@ -19,11 +19,11 @@ refine_original_2 <- tbl_df(refine_original_2)
 
 ```{r}
 
-refine_original_2$company[1:6] = "philips"
-refine_original_2$company[7:13] = "akzo"
-refine_original_2$company[14:16] = "philips"
-refine_original_2$company[17:21] = "van houten"
-refine_original_2$company[22:25] = "unilever"
+refine_cleaning$company[1:6] = "philips"
+refine_cleaning$company[7:13] = "akzo"
+refine_cleaning$company[14:16] = "philips"
+refine_cleaning$company[17:21] = "van houten"
+refine_cleaning$company[22:25] = "unilever"
 
 ```
 
@@ -31,7 +31,7 @@ refine_original_2$company[22:25] = "unilever"
 
 ```{r}
 
-refine_original_2 <- separate(refine_original_2, "Product.code...number", c("product_code", "product_number"), sep = "-")
+refine_cleaning <- separate(refine_cleaning, "Product.code...number", c("product_code", "product_number"), sep = "-")
 
 ```
 
@@ -42,7 +42,7 @@ refine_original_2 <- separate(refine_original_2, "Product.code...number", c("pro
 products <- c("Smartphone", "TV", "Laptop", "Tablet")
 product_code <- c("p","v","x","q")
 product_df <- data_frame(products, product_code)
-refine_originial_2 <- left_join(refine_original_2, product_df, by="product_code")
+refine_cleaning <- left_join(refine_cleaning, product_df, by="product_code")
 
 ```
 
@@ -50,9 +50,27 @@ refine_originial_2 <- left_join(refine_original_2, product_df, by="product_code"
 
 ```{r}
 
-refine_original_2 <- unite(refine_original_2, full_address, address, city, country, sep = ", ", remove = FALSE)
+refine_cleaning <- unite(refine_cleaning, full_address, address, city, country, sep = ", ", remove = FALSE)
 
 ```
 ## 5: Create dummy variables for company and product category
+```{r}
 
+refine_cleaning <- mutate(refine_cleaning, company_philips = as.numeric(company == 'philips'))
+refine_cleaning <- mutate(refine_cleaning, company_akzo = as.numeric(company == 'akzo'))
+refine_cleaning <- mutate(refine_cleaning, company_van_houten = as.numeric(company == 'van houten'))
+refine_cleaning <- mutate(refine_cleaning, company_unilever = as.numeric(company == 'unilever'))
+refine_cleaning <- mutate(refine_cleaning, product_smartphone = as.numeric(products == 'Smartphone'))
+refine_cleaning <- mutate(refine_cleaning, product_tv = as.numeric(products == 'TV'))
+refine_cleaning <- mutate(refine_cleaning, product_laptop = as.numeric(products == 'Laptop'))
+refine_cleaning <- mutate(refine_cleaning, product_tablet = as.numeric(products == 'Tablet'))
+
+```
+## 6: Submit to github original and cleaned up .csv files
+```{r}
+
+refine_clean <- refine_cleaning
+write.csv(refine_clean, file = "refine_clean.csv")
+
+```
 
