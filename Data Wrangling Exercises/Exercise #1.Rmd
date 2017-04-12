@@ -6,15 +6,19 @@ output: html_document
 ---
 
 ## Load libraries and data
-```{r}
+```{r, message=FALSE} 
+
 library(dplyr)
 library(tidyr)
+refine_original_2 <- read.csv("refine_original.csv")
+refine_original_2 <- tbl_df(refine_original_2)
 
 ```
 
 ## 1: Clean up brand names
 
 ```{r}
+
 refine_original_2$company[1:6] = "philips"
 refine_original_2$company[7:13] = "akzo"
 refine_original_2$company[14:16] = "philips"
@@ -26,12 +30,15 @@ refine_original_2$company[22:25] = "unilever"
 ## 2: Separate produce code and number
 
 ```{r}
-refine_original_2 <- separate(refine_original, 'Product code / number', c("product_code", "product_number"), sep = "-")
+
+refine_original_2 <- separate(refine_original_2, "Product.code...number", c("product_code", "product_number"), sep = "-")
+
 ```
 
 ## 3: Add product categories
 
 ```{r}
+
 products <- c("Smartphone", "TV", "Laptop", "Tablet")
 product_code <- c("p","v","x","q")
 product_df <- data_frame(products, product_code)
@@ -42,12 +49,10 @@ refine_originial_2 <- left_join(refine_original_2, product_df, by="product_code"
 ## 4: Add full address for geocoding
 
 ```{r}
-refine_original_2 <- unite(refine_original_2, full_address, address, city, country, sep = ", ", remove = FALSE)
-```
 
+refine_original_2 <- unite(refine_original_2, full_address, address, city, country, sep = ", ", remove = FALSE)
+
+```
 ## 5: Create dummy variables for company and product category
 
-```{r}
-
-```
 
