@@ -1,0 +1,29 @@
+---
+title: 'Exercise #2'
+author: "Aaron Lopez"
+date: "4/13/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load libraries and data
+```{r, message=FALSE}
+library(dplyr)
+library(tidyr)
+titanic_original <- read.csv("titanic_original.csv")
+titanic_cleaning <- tbl_df(titanic_original)
+```
+## 1: Port of embarkation
+```{r}
+titanic_cleaning[titanic_cleaning == ''] <- NA
+titanic_cleaning <- replace_na(titanic_cleaning, list(embarked = "S"))
+```
+## 2: Age
+```{r}
+mean_age <- titanic_cleaning$age %>% na.exclude() %>% mean()
+titanic_cleaning <- replace_na(titanic_cleaning, list(age = mean_age))
+```
+## 3: Lifeboat
