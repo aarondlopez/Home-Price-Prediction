@@ -23,9 +23,7 @@ titanic_cleaning <- replace_na(titanic_cleaning, list(embarked = "S"))
 ```
 ## 2: Age
 ```{r}
-titanic_cleaning$age %>% 
-     na.exclude() %>% 
-     mean()
-
+mean_age <- titanic_cleaning$age %>% na.exclude() %>% mean()
+titanic_cleaning <- replace_na(titanic_cleaning, list(age = mean_age))
 ```
-
+## 3: Lifeboat
