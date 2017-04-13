@@ -1,0 +1,20 @@
+---
+title: 'Exercise #2'
+author: "Aaron Lopez"
+date: "4/13/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load libraries and data
+```{r, message=FALSE}
+library(dplyr)
+library(tidyr)
+titanic_original <- read.csv("titanic_original.csv")
+titanic_cleaning <- tbl_df(titanic_original)
+
+```
+

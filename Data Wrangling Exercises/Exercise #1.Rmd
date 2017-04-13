@@ -41,7 +41,7 @@ refine_cleaning <- separate(refine_cleaning, "Product.code...number", c("product
 
 products <- c("Smartphone", "TV", "Laptop", "Tablet")
 product_code <- c("p","v","x","q")
-product_df <- data_frame(products, product_code)
+product_df <- data_frame(products, product_code)?
 refine_cleaning <- left_join(refine_cleaning, product_df, by="product_code")
 
 ```
