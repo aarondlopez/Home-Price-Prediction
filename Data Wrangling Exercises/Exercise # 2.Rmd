@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Load libraries and data
+## 0: Load libraries and data
 ```{r, message=FALSE}
 library(dplyr)
 library(tidyr)
@@ -27,3 +27,11 @@ mean_age <- titanic_cleaning$age %>% na.exclude() %>% mean()
 titanic_cleaning <- replace_na(titanic_cleaning, list(age = mean_age))
 ```
 ## 3: Lifeboat
+```{r}
+
+```
+## 4: Cabin
+```{r}
+
+```
+## 5: Submit final .csv
