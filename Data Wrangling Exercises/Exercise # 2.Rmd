@@ -8,7 +8,6 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
 ## 0: Load libraries and data
 ```{r, message=FALSE}
 library(dplyr)
@@ -27,11 +26,16 @@ mean_age <- titanic_cleaning$age %>% na.exclude() %>% mean()
 titanic_cleaning <- replace_na(titanic_cleaning, list(age = mean_age))
 ```
 ## 3: Lifeboat
-```{r}
+##### In question 1 df was updated to replace all blanks with NA (titanic_cleaning[titanic_cleaning == ''] <- NA)
 
-```
 ## 4: Cabin
 ```{r}
-
+titanic_cleaning <- mutate(titanic_cleaning, has_cabin_number = as.numeric(cabin == ''))
+titanic_cleaning$has_cabin_number[is.na(titanic_cleaning$has_cabin_number)] <- 1
 ```
 ## 5: Submit final .csv
+```{r}
+titanic_clean <- titanic_cleaning
+write.csv(titanic_clean, file = "titanic_clean.csv")
+```
+
