@@ -126,7 +126,17 @@ $(document).ready(function () {
 <div id="load-data-and-libraries" class="section level2">
 <h2>Load Data and Libraries…</h2>
 <pre class="r"><code>library(dplyr)
-library(tidyr)</code></pre>
+library(tidyr)
+library(reshape2)
+jobs_by_sector &lt;- read.csv(&quot;jobs_by_sector.csv&quot;)
+jobs_by_sector &lt;- tbl_df(jobs_by_sector)</code></pre>
+</div>
+<div id="data-wrangling" class="section level2">
+<h2>Data Wrangling</h2>
+<p>Clean up jobs_by_secotr df</p>
+<pre class="r"><code>jobs_by_sector &lt;- melt(jobs_by_sector, variable.name = &quot;Sector&quot;)
+colnames(jobs_by_sector)[2] &lt;- &quot;Date&quot;
+jobs_by_sector &lt;- spread(jobs_by_sector, Sector, value)</code></pre>
 </div>
 
 

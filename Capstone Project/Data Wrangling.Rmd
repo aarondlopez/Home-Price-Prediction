@@ -14,13 +14,15 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(tidyr)
 library(reshape2)
+jobs_by_sector <- read.csv("jobs_by_sector.csv")
+jobs_by_sector <- tbl_df(jobs_by_sector)
 ```
 
 ## Data Wrangling
-### Clean up jobs_by_secotr df
-```{r}
+Clean up jobs_by_secotr df
+```{r, message=FALSE}
 jobs_by_sector <- melt(jobs_by_sector, variable.name = "Sector")
 colnames(jobs_by_sector)[2] <- "Date"
-jobs_by_secotr <- spread(jobs_by_sector, Sector, value)
+jobs_by_sector <- spread(jobs_by_sector, Sector, value)
 ```
 
