@@ -1,0 +1,26 @@
+---
+title: "Data Wrangling"
+author: "Aaron"
+date: "4/18/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load Data and Libraries...
+```{r message=FALSE}
+library(dplyr)
+library(tidyr)
+library(reshape2)
+```
+
+## Data Wrangling
+### Clean up jobs_by_secotr df
+```{r}
+jobs_by_sector <- melt(jobs_by_sector, variable.name = "Sector")
+colnames(jobs_by_sector)[2] <- "Date"
+jobs_by_secotr <- spread(jobs_by_sector, Sector, value)
+```
+
