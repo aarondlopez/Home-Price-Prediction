@@ -15,26 +15,33 @@ library(dplyr)
 library(tidyr)
 library(reshape2)
 library(plyr)
-jobs_by_sector <- read.csv("jobs_by_sector.csv")
-jobs_by_sector <- tbl_df(jobs_by_sector)
-home_prices <- read.csv("home_prices.csv")
-home_prices <- tbl_df(home_prices)
-total_jobs <- read.csv("total_jobs.csv")
-total_jobs <- tbl_df(total_jobs)
-unemployment <- read.csv("unemployment.csv")
-unemployment <- tbl_df(unemployment)
-apt_rents <- read.csv("apt_rents.csv")
-apt_rents <- tbl_df(apt_rents)
+jobs_by_sector  <- read.csv("jobs_by_sector.csv")
+home_prices     <- read.csv("home_prices.csv")
+total_jobs      <- read.csv("total_jobs.csv")
+unemployment    <- read.csv("unemployment.csv")
+apt_rents       <- read.csv("apt_rents.csv")
+jobs_by_sector  <- tbl_df(jobs_by_sector)
+home_prices     <- tbl_df(home_prices)
+total_jobs      <- tbl_df(total_jobs)
+unemployment    <- tbl_df(unemployment)
+apt_rents       <- tbl_df(apt_rents)
 ```
 
 ## Data Wrangling
 Clean up jobs_by_secotr df
 ```{r, message=FALSE}
+# Bring column names (dates) into a unique column so table is in long format
 jobs_by_sector <- melt(jobs_by_sector, variable.name = "Sector")
+
+# Rename Second column to reflect dates in the row
 colnames(jobs_by_sector)[2] <- "Date"
+
+# Move sector names into column names moving the table back to wide format
 jobs_by_sector <- spread(jobs_by_sector, Sector, value)
+
 # Changing dates from string to date format. as.Date returns NA for "Sept" abbreviation so first we'll change that to "Sep"
 jobs_by_sector$Date <- gsub("Sept", "Sep", jobs_by_sector$Date)
+
 # Adding a day
 jobs_by_sector$Date <- paste0("01.", jobs_by_sector$Date)
 jobs_by_sector$Date <- as.Date(jobs_by_sector$Date, format = "%d.%b.%Y", "%b/%d/%Y")
@@ -43,32 +50,34 @@ Clean up dates for all other dfs
 ```{r, message=FALSE}
 # Step 1 "Sept" replaced with "Sep"
 home_prices$Date <- gsub("Sept", "Sep", home_prices$Date)
+
 # Step 2 adding a day then format to date
 home_prices$Date <- home_prices$Date %>% 
     paste("01", sep = " ") %>% 
     as.Date(format = "%b %Y %d", "%b/%d/%Y")
 
-# Same steps for total_jobs
+# Same steps for total_jobs df
 total_jobs$Date <- gsub("Sept", "Sep", total_jobs$Date)
 total_jobs$Date <- total_jobs$Date %>%
     paste("01", sep = " ") %>% 
     as.Date(format = "%b %Y %d", "%b/%d/%Y")
 
-# Again for unemployment
+# Again for unemployment df
 unemployment$Date <- gsub("Sept", "Sep", unemployment$Date)
 unemployment$Date <- unemployment$Date %>%
     paste("01", sep = " ") %>%
     as.Date(format = "%b %Y %d", "%b/%d/%Y")
 
-# Slightly different strategy for apt_rents. Dates are integer format. First I added the day then converted to date format.
+# Slightly different strategy for apt_rents df. Dates are in integer format. First I added the day then converted to date format.
 apt_rents$Date <- paste0("01/", apt_rents$Date)
 apt_rents$Date <- apt_rents$Date %>% 
     as.Date(format = "%d/%m/%Y", "%b/%d/%Y")
 
-# combine all df and arrange by desending date
+# Combine all df and arrange by desending date
 clean_df <- join_all(list(jobs_by_sector,apt_rents,home_prices,total_jobs,unemployment), by="Date", type="left")
 clean_df <- arrange(clean_df, desc(Date))
-# create new csv file
+
+# Create new csv file
 write.csv(clean_df, file = "clean_df.csv")
 ```
 
