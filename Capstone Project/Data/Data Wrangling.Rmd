@@ -1,12 +1,12 @@
 ---
-title: "Data Wrangling"
+title: "Capstone Data Wrangling"
 author: "Aaron"
 date: "4/18/2017"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 ```
 
 ## Load Data and Libraries...
