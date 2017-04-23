@@ -16,6 +16,12 @@ library(tidyr)
 library(reshape2)
 jobs_by_sector <- read.csv("jobs_by_sector.csv")
 jobs_by_sector <- tbl_df(jobs_by_sector)
+home_prices <- read.csv("home_prices.csv")
+home_prices <- tbl_df(home_prices)
+total_jobs <- read.csv("total_jobs.csv")
+total_jobs <- tbl_df(total_jobs)
+unemployment <- read.csv("unemployment.csv")
+unemployment <- tbl_df(unemployment)
 ```
 
 ## Data Wrangling
@@ -24,5 +30,27 @@ Clean up jobs_by_secotr df
 jobs_by_sector <- melt(jobs_by_sector, variable.name = "Sector")
 colnames(jobs_by_sector)[2] <- "Date"
 jobs_by_sector <- spread(jobs_by_sector, Sector, value)
+```
+Clean up dates before joining all dfs
+I started with home_prices. The second step worked perfectly except on "Sept" which returned NA. as.Date prefers the "Sep" abbreviation over "Sept" therefore I had to first substitute all "Sept" for "Sep" before converting all the string dates to date format.
+```{r, message=FALSE}
+# Step 1
+home_prices$Date <- gsub("Sept", "Sep", home_prices$Date)
+# Step 2
+home_prices$Date <- home_prices$Date %>% 
+    paste("01", sep = " ") %>% 
+    as.Date(format = "%b %Y %d", "%b/%d/%Y")
+
+# Same steps for total_jobs
+total_jobs$Date <- gsub("Sept", "Sep", total_jobs$Date)
+total_jobs$Date <- total_jobs$Date %>%
+    paste("01", sep = " ") %>% 
+    as.Date(format = "%b %Y %d", "%b/%d/%Y")
+
+# Again for unemployment
+unemployment$Date <- gsub("Sept", "Sep", unemployment$Date)
+unemployment$Date <- unemployment$Date %>%
+    paste("01", sep = " ") %>%
+    as.Date(format = "%b %Y %d", "%b/%d/%Y")
 ```
 
