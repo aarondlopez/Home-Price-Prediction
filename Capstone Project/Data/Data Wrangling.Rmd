@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(tidyr)
 library(reshape2)
+library(plyr)
 jobs_by_sector <- read.csv("jobs_by_sector.csv")
 jobs_by_sector <- tbl_df(jobs_by_sector)
 home_prices <- read.csv("home_prices.csv")
@@ -32,13 +33,17 @@ Clean up jobs_by_secotr df
 jobs_by_sector <- melt(jobs_by_sector, variable.name = "Sector")
 colnames(jobs_by_sector)[2] <- "Date"
 jobs_by_sector <- spread(jobs_by_sector, Sector, value)
+# Changing dates from string to date format. as.Date returns NA for "Sept" abbreviation so first we'll change that to "Sep"
+jobs_by_sector$Date <- gsub("Sept", "Sep", jobs_by_sector$Date)
+# Adding a day
+jobs_by_sector$Date <- paste0("01.", jobs_by_sector$Date)
+jobs_by_sector$Date <- as.Date(jobs_by_sector$Date, format = "%d.%b.%Y", "%b/%d/%Y")
 ```
-Clean up dates before joining all dfs
-I started with home_prices. The second step worked perfectly except on "Sept" which returned NA. as.Date prefers the "Sep" abbreviation over "Sept" therefore I had to first substitute all "Sept" for "Sep" before converting all the string dates to date format.
+Clean up dates for all other dfs
 ```{r, message=FALSE}
-# Step 1
+# Step 1 "Sept" replaced with "Sep"
 home_prices$Date <- gsub("Sept", "Sep", home_prices$Date)
-# Step 2
+# Step 2 adding a day then format to date
 home_prices$Date <- home_prices$Date %>% 
     paste("01", sep = " ") %>% 
     as.Date(format = "%b %Y %d", "%b/%d/%Y")
@@ -59,5 +64,11 @@ unemployment$Date <- unemployment$Date %>%
 apt_rents$Date <- paste0("01/", apt_rents$Date)
 apt_rents$Date <- apt_rents$Date %>% 
     as.Date(format = "%d/%m/%Y", "%b/%d/%Y")
+
+# combine all df and arrange by desending date
+clean_df <- join_all(list(jobs_by_sector,apt_rents,home_prices,total_jobs,unemployment), by="Date", type="left")
+clean_df <- arrange(clean_df, desc(Date))
+# create new csv file
+write.csv(clean_df, file = "clean_df.csv")
 ```
 
