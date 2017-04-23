@@ -22,6 +22,8 @@ total_jobs <- read.csv("total_jobs.csv")
 total_jobs <- tbl_df(total_jobs)
 unemployment <- read.csv("unemployment.csv")
 unemployment <- tbl_df(unemployment)
+apt_rents <- read.csv("apt_rents.csv")
+apt_rents <- tbl_df(apt_rents)
 ```
 
 ## Data Wrangling
@@ -52,5 +54,10 @@ unemployment$Date <- gsub("Sept", "Sep", unemployment$Date)
 unemployment$Date <- unemployment$Date %>%
     paste("01", sep = " ") %>%
     as.Date(format = "%b %Y %d", "%b/%d/%Y")
+
+# Slightly different strategy for apt_rents. Dates are integer format. First I added the day then converted to date format.
+apt_rents$Date <- paste0("01/", apt_rents$Date)
+apt_rents$Date <- apt_rents$Date %>% 
+    as.Date(format = "%d/%m/%Y", "%b/%d/%Y")
 ```
 
