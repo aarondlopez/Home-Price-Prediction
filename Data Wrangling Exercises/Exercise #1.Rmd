@@ -19,11 +19,10 @@ refine_cleaning <- tbl_df(refine_original)
 
 ```{r}
 
-refine_cleaning$company[1:6] = "philips"
-refine_cleaning$company[7:13] = "akzo"
-refine_cleaning$company[14:16] = "philips"
-refine_cleaning$company[17:21] = "van houten"
-refine_cleaning$company[22:25] = "unilever"
+refine_cleaning$company <- gsub("[Vv].*n$", "van houten", refine_cleaning$company)
+refine_cleaning$company <- gsub("[Uu].*r$", "unilver", refine_cleaning$company)
+refine_cleaning$company <- gsub("^[aA].*", "akzo", refine_cleaning$company)
+refine_cleaning$company <- gsub("[PpFf].*[Ss]", "phillips", refine_cleaning$company)
 
 ```
 
@@ -41,7 +40,7 @@ refine_cleaning <- separate(refine_cleaning, "Product.code...number", c("product
 
 products <- c("Smartphone", "TV", "Laptop", "Tablet")
 product_code <- c("p","v","x","q")
-product_df <- data_frame(products, product_code)?
+product_df <- data_frame(products, product_code)
 refine_cleaning <- left_join(refine_cleaning, product_df, by="product_code")
 
 ```
