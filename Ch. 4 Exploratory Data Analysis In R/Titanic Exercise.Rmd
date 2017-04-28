@@ -5,25 +5,30 @@ date: "4/28/2017"
 output: html_document
 ---
 
-```{r}
-# titanic is avaliable in your workspace
+```{r, message=FALSE}
+
+library(ggplot2)
+titanic <- read.csv("titanic.csv")
 
 # Check out the structure of titanic
 str(titanic)
 
 # Use ggplot() for the first instruction
-ggplot(titanic, aes(x = factor(Pclass), fill = factor(Sex))) + geom_bar()
+ggplot(titanic, aes(x = factor(pclass), fill = factor(sex))) + 
+  geom_bar()
 
 # Use ggplot() for the second instruction
-ggplot(titanic, aes(x = factor(Pclass), fill = factor(Sex))) + geom_bar() + facet_grid(".~ Survived")
-
+ggplot(titanic, aes(x = factor(pclass), fill = factor(sex))) + 
+  geom_bar() + 
+  facet_grid(".~ survived")
 
 # Position jitter (use below)
 posn.j <- position_jitter(0.5, 0)
 
 # Use ggplot() for the last instruction
-ggplot(titanic, aes(x = factor(Pclass), y = Age, col = factor(Sex))) + 
+ggplot(titanic, aes(x = factor(pclass), y = age, col = factor(sex))) + 
   geom_jitter(size = 3, alpha = 0.5, position = posn.j) +
-  facet_grid(".~ Survived")
+  facet_grid(".~ survived")
+
 ```
 
