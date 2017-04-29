@@ -5,14 +5,18 @@ date: "4/29/2017"
 output: html_document
 ---
 
+### Load libraries
 ```{r, message=FALSE, warning=FALSE}
-# Load all packages
+
 library(ggplot2)
 library(reshape2)
 library(dplyr)
 library(ggthemes)
+```
 
-# Script generalized into a function
+### Create a mosaicGG function to use on data sets going forward. 
+
+```{r}
 mosaicGG <- function(data, X, FILL) {
   
   # Proportions in raw data
@@ -57,13 +61,19 @@ mosaicGG <- function(data, X, FILL) {
   theme(legend.position = "bottom")
   print(g)
 }
+```
 
+### Use mosaicGG function on some data sets to see what we get. I took out adult from the exercise becuase the data set was unavailable. I added an example using the diamonds data set since that is part of the ggplot package.
+
+```{r, message=FALSE, warning=FALSE}
 # mtcars: am described by cyl
 mosaicGG(mtcars, "cyl", "am")
+
+# diamonds: clarity described by color
+mosaicGG(diamonds, "color", "clarity")
 
 # Vocab: vocabulary described by education
 library(car)
 mosaicGG(Vocab, "education", "vocabulary")
-
 ```
 
