@@ -5,22 +5,45 @@ date: "4/28/2017"
 output: html_document
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=TRUE)
+```
+
+#### Load library and data
 ```{r, message=FALSE}
 
 library(ggplot2)
 titanic <- read.csv("titanic.csv")
 
-# Check out the structure of titanic
+```
+#### Check out the structure of titanic df
+```{r, eval=FALSE}
 str(titanic)
+```
+#### Create a bar chart showing passanger sex(m/f) as a function of pclass. Both sex and class are categorial so they are set as factors.
+
+```{r}
 
 # Use ggplot() for the first instruction
 ggplot(titanic, aes(x = factor(pclass), fill = factor(sex))) + 
   geom_bar()
 
+```
+
+#### Use facet_grid to add another variable, survived. We can now see within each class, male or female how many survived.
+
+```{r}
+
 # Use ggplot() for the second instruction
 ggplot(titanic, aes(x = factor(pclass), fill = factor(sex))) + 
   geom_bar() + 
   facet_grid(".~ survived")
+
+```
+
+#### Lastly, we replace count with age and bar chart with a jitter dot plot. Size creates the size of the dots, alpha creates the transparancy and we use the variable posn.j that was created to determine the degree of random noise we use with jitter.
+
+```{r}
 
 # Position jitter (use below)
 posn.j <- position_jitter(0.5, 0)
