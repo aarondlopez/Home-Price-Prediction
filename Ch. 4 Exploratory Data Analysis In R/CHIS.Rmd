@@ -14,7 +14,7 @@ library(dplyr)
 library(ggthemes)
 ```
 
-### Create a mosaicGG function to use on data sets going forward. 
+### Create a mosaicGG function to use on data sets going forward. In the function we are created a Chi-sq test to show the proportion of each group that is over or under represented in our data set. Those results are then used to create our heatmap plot. 
 
 ```{r}
 mosaicGG <- function(data, X, FILL) {
@@ -27,7 +27,6 @@ mosaicGG <- function(data, X, FILL) {
   DF$X <- row.names(DF)
   DF$groupSum <- NULL
   DF_melted <- melt(DF, id = c("X", "xmin", "xmax"), variable.name = "FILL")
-  library(dplyr)
   DF_melted <- DF_melted %>% 
     group_by(X) %>% 
     mutate(ymax = cumsum(value/sum(value)),
