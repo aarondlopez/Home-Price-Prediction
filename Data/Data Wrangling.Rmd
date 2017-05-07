@@ -75,5 +75,15 @@ clean_df <- arrange(clean_df, desc(Date))
 
 # Create new csv file
 write.csv(clean_df, file = "clean_df.csv")
+
+```
+Removing "$" and commas "," then converting all data types to numeric
+```{r}
+clean_df$Condo.Townhome <- gsub("\\$|,", "", clean_df$Condo.Townhome)
+clean_df$Single.Family.Home <- gsub("\\$|,", "", clean_df$Single.Family.Home)
+clean_df$X2.bedroom <- gsub("*,", "", clean_df$X2.bedroom)
+clean_df$X1.Bedroom <- gsub("*,", "", clean_df$X1.Bedroom)
+clean_df$Average <- gsub("*,", "", clean_df$Average)
+clean_df[2:18] <- lapply(clean_df[2:18], as.numeric)
 ```
 
