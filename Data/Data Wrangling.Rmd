@@ -21,6 +21,7 @@ home_prices     <- tbl_df(home_prices)
 total_jobs      <- tbl_df(total_jobs)
 unemployment    <- tbl_df(unemployment)
 apt_rents       <- tbl_df(apt_rents)
+
 ```
 
 ## Data Wrangling
@@ -52,7 +53,10 @@ colnames(jobs_by_sector)[10] <- "Business"
 colnames(jobs_by_sector)[11] <- "Public"
 colnames(jobs_by_sector)[12] <- "Trade"
 jobs_by_sector <- jobs_by_sector %>% 
-     gather(Construction, Education, Finance, Information, Hospitality, Manufacturing, Mining, Other, Business, Public,         Trade, Unclassified, key = "Job Sector", value = "Number of Jobs")
+  gather(Construction, Education, Finance, Information, Hospitality, 
+         Manufacturing, Mining, Other, Business, Public, Trade, Unclassified, 
+         key = "Job Sector", value = "Number of Jobs")
+
 ```
 Clean up dates for all other dfs
 ```{r, message=FALSE}
@@ -85,9 +89,6 @@ apt_rents$Date <- apt_rents$Date %>%
 clean_df <- join_all(list(jobs_by_sector,apt_rents,home_prices,total_jobs,unemployment), by="Date", type="left")
 clean_df <- arrange(clean_df, desc(Date))
 
-# Create new csv file
-write.csv(clean_df, file = "clean_df.csv")
-
 ```
 Removing "$" and commas "," then converting all data types to numeric
 ```{r}
@@ -97,5 +98,18 @@ clean_df$X2.bedroom <- gsub("*,", "", clean_df$X2.bedroom)
 clean_df$X1.Bedroom <- gsub("*,", "", clean_df$X1.Bedroom)
 clean_df$Average <- gsub("*,", "", clean_df$Average)
 clean_df[3:9] <- lapply(clean_df[3:9], as.numeric)
+# Renaming variables with more descrptive names
+colnames(clean_df)[4] <- "Average Apt Rent"
+colnames(clean_df)[5] <- "Average 1bd Apt Rent"
+colnames(clean_df)[6] <- "Average 2bd Apt Rent"
+colnames(clean_df)[7] <- "Average Price Single Family Home"
+colnames(clean_df)[8] <- "Average Price Condo.Townhome"
+colnames(clean_df)[9] <- "Total Jobs"
+colnames(clean_df)[10] <- "Unemployment Rate for San Jose"
+colnames(clean_df)[11] <- "Unemployment Rate for San Jose Metro Area"
+
+# Create new csv file
+write.csv(clean_df, file = "clean_df.csv")
+
 ```
 
