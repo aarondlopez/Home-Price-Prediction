@@ -41,6 +41,18 @@ jobs_by_sector$Date <- gsub("Sept", "Sep", jobs_by_sector$Date)
 # Adding a day
 jobs_by_sector$Date <- paste0("01.", jobs_by_sector$Date)
 jobs_by_sector$Date <- as.Date(jobs_by_sector$Date, format = "%d.%b.%Y", "%b/%d/%Y")
+
+# Setup column names for gather function 
+colnames(jobs_by_sector)[3] <- "Education"
+colnames(jobs_by_sector)[4] <- "Finance"
+colnames(jobs_by_sector)[6] <- "Hospitality"
+colnames(jobs_by_sector)[8] <- "Mining"
+colnames(jobs_by_sector)[9] <- "Other"
+colnames(jobs_by_sector)[10] <- "Business"
+colnames(jobs_by_sector)[11] <- "Public"
+colnames(jobs_by_sector)[12] <- "Trade"
+jobs_by_sector <- jobs_by_sector %>% 
+     gather(Construction, Education, Finance, Information, Hospitality, Manufacturing, Mining, Other, Business, Public,         Trade, Unclassified, key = "Job Sector", value = "Number of Jobs")
 ```
 Clean up dates for all other dfs
 ```{r, message=FALSE}
@@ -84,6 +96,6 @@ clean_df$Single.Family.Home <- gsub("\\$|,", "", clean_df$Single.Family.Home)
 clean_df$X2.bedroom <- gsub("*,", "", clean_df$X2.bedroom)
 clean_df$X1.Bedroom <- gsub("*,", "", clean_df$X1.Bedroom)
 clean_df$Average <- gsub("*,", "", clean_df$Average)
-clean_df[2:19] <- lapply(clean_df[2:19], as.numeric)
+clean_df[3:9] <- lapply(clean_df[3:9], as.numeric)
 ```
 
