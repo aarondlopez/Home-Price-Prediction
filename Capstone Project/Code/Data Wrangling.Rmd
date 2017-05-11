@@ -111,7 +111,7 @@ colnames(clean_df)[10] <- "URateSJ"
 colnames(clean_df)[11] <- "URateSJMetro"
 
 # Create new csv file
-# write.csv(clean_df, file = "clean_df.csv")
+write.csv(clean_df, file = "/Users/Aaron/Springboard/Capstone Project/Data/clean_df.csv")
 
 ```
 
