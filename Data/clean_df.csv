@@ -1,4 +1,4 @@
-"","Date","Job Sector","Number of Jobs","Average Apt Rent","Average 1bd Apt Rent","Average 2bd Apt Rent","Average Price Single Family Home","Average Price Condo.Townhome","Total Jobs","Unemployment Rate for San Jose","Unemployment Rate for San Jose Metro Area"
+"","Date","JobSector","NumJobs","AvgAptRent","Avg1bdAptRent","Avg2bdAptRent","AvgPriceHome","AvgPriceCondo","TotalJobs","URateSJ","URateSJMetro"
 "1",2015-12-01,"Construction",22886,2791,2469,3073,825000,465000,403194,4.2,3.9
 "2",2015-12-01,"Education",82406,2791,2469,3073,825000,465000,403194,4.2,3.9
 "3",2015-12-01,"Finance",16574,2791,2469,3073,825000,465000,403194,4.2,3.9

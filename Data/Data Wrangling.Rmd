@@ -55,7 +55,7 @@ colnames(jobs_by_sector)[12] <- "Trade"
 jobs_by_sector <- jobs_by_sector %>% 
   gather(Construction, Education, Finance, Information, Hospitality, 
          Manufacturing, Mining, Other, Business, Public, Trade, Unclassified, 
-         key = "Job Sector", value = "Number of Jobs")
+         key = "JobSector", value = "NumJobs")
 
 ```
 Clean up dates for all other dfs
@@ -98,15 +98,17 @@ clean_df$X2.bedroom <- gsub("*,", "", clean_df$X2.bedroom)
 clean_df$X1.Bedroom <- gsub("*,", "", clean_df$X1.Bedroom)
 clean_df$Average <- gsub("*,", "", clean_df$Average)
 clean_df[3:9] <- lapply(clean_df[3:9], as.numeric)
+clean_df$JobSector <- as.factor(clean_df$JobSector)
+
 # Renaming variables with more descrptive names
-colnames(clean_df)[4] <- "Average Apt Rent"
-colnames(clean_df)[5] <- "Average 1bd Apt Rent"
-colnames(clean_df)[6] <- "Average 2bd Apt Rent"
-colnames(clean_df)[7] <- "Average Price Single Family Home"
-colnames(clean_df)[8] <- "Average Price Condo.Townhome"
-colnames(clean_df)[9] <- "Total Jobs"
-colnames(clean_df)[10] <- "Unemployment Rate for San Jose"
-colnames(clean_df)[11] <- "Unemployment Rate for San Jose Metro Area"
+colnames(clean_df)[4] <- "AvgAptRent"
+colnames(clean_df)[5] <- "Avg1bdAptRent"
+colnames(clean_df)[6] <- "Avg2bdAptRent"
+colnames(clean_df)[7] <- "AvgPriceHome"
+colnames(clean_df)[8] <- "AvgPriceCondo"
+colnames(clean_df)[9] <- "TotalJobs"
+colnames(clean_df)[10] <- "URateSJ"
+colnames(clean_df)[11] <- "URateSJMetro"
 
 # Create new csv file
 write.csv(clean_df, file = "clean_df.csv")
