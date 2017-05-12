@@ -1,0 +1,29 @@
+---
+title: "Statistical Analysis Report"
+author: "Aaron Lopez"
+date: "5/11/2017"
+output: html_document
+---
+
+```{r}
+library(ggplot2)
+library(ggthemes)
+
+# Time series of jobs by sector 2008-2016
+ ggplot(clean_df, aes(Date, NumJobs, col = JobSector)) + geom_point()
+
+# Time series of Education sector jobs with visable seasonality
+ggplot(subset(clean_df, JobSector=="Education")) + geom_point(aes(Date, NumJobs, col = JobSector))
+
+# Total jobs and unemployment rate
+ggplot(clean_df, aes(URateSJ, TotalJobs)) + geom_point()
+
+# Time series of avergae home prices
+ggplot(clean_df, aes(Date, AvgPriceHome/1000)) + geom_point() + geom_smooth()
+# Time series of average home prices line, drop off at the end of each year. Best time to buy a home?
+ggplot(clean_df, aes(Date, AvgPriceHome/1000)) + geom_line()
+
+
+
+```
+
