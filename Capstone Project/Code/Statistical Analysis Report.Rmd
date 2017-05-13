@@ -3,8 +3,8 @@ title: "Statistical Analysis Report"
 author: "Aaron Lopez"
 date: "5/11/2017"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 ### Statistical Analysis Report for Ch.6
 
