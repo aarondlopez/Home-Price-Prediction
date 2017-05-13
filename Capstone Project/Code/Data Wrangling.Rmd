@@ -11,11 +11,11 @@ library(dplyr)
 library(tidyr)
 library(reshape2)
 library(plyr)
-jobs_by_sector  <- read.csv("/Users/aarondlopez/Desktop/Springboard/Capstone Project/Data/jobs_by_sector.csv")
-home_prices     <- read.csv("/Users/aarondlopez/Desktop/Springboard/Capstone Project/Data/home_prices.csv")
-total_jobs      <- read.csv("/Users/aarondlopez/Desktop/Springboard/Capstone Project/Data/total_jobs.csv")
-unemployment    <- read.csv("/Users/aarondlopez/Desktop/Springboard/Capstone Project/Data/unemployment.csv")
-apt_rents       <- read.csv("/Users/aarondlopez/Desktop/Springboard/Capstone Project/Data/apt_rents.csv")
+jobs_by_sector  <- read.csv("Data/jobs_by_sector.csv")
+home_prices     <- read.csv("Data/home_prices.csv")
+total_jobs      <- read.csv("Data/total_jobs.csv")
+unemployment    <- read.csv("Data/unemployment.csv")
+apt_rents       <- read.csv("Data/apt_rents.csv")
 jobs_by_sector  <- tbl_df(jobs_by_sector)
 home_prices     <- tbl_df(home_prices)
 total_jobs      <- tbl_df(total_jobs)
@@ -111,7 +111,7 @@ colnames(clean_df)[10] <- "URateSJ"
 colnames(clean_df)[11] <- "URateSJMetro"
 
 # Create new csv file
-write.csv(clean_df, file = "/Users/aarondlopez/Desktop/Springboard/Capstone Project/Data/clean_df.csv")
+write.csv(clean_df, file = "Data/clean_df.csv")
 
 ```
 Data Discovery
