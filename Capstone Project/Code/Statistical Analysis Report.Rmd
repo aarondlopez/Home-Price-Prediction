@@ -2,17 +2,20 @@
 title: "Statistical Analysis Report"
 author: "Aaron Lopez"
 date: "5/11/2017"
-output:
-  pdf_document: default
-  html_document: default
+output: html_document
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 ### Statistical Analysis Report for Ch.6
 
-The first time series of home prices (HomePricesSmooth.png) shows the slide of home prices during the financial crises. Some observations are the second drop in prices a few years after the financial crises and the subequent rebound in more recent years to pre-resession levels. There also seems to be a annual seasonal trend with prices rising in the beginning of the year then falling again at the end of the year. (AvgHomePriceLine.png)
+The first time series of home prices (AvgHomePrice.png) shows the slide of home prices during the financial crises. Some observations are the second drop in prices a few years after the financial crises and the subequent rebound in more recent years to pre-resession levels. There also seems to be a annual seasonal trend with prices rising in the beginning of the year then falling again at the end of the year. (AvgHomePriceLine.png)
 
-The second time series shows total number of jobs by sector (JobSectorTS.png). Education, Business, and Trade are the top sectors in terms of number of jobs. Education also shows strong seasonal trends with summer months as school is not in session and there are less teaching jobs (EducationSectorJobs.png)
+The second time series shows total number of jobs by sector (JobSector.png). Education, Business, and Trade are the top sectors in terms of number of jobs. Education also shows strong seasonal trends with summer months as school is not in session and there are less teaching jobs (EducationSector.png)
 
-The final plots relate to total jobs and the unemployment rate (TotalJobsandURate.png) there is a clear negative correlation between the total number of jobs and the unemployment rate. As the uemployment rate increases the total number of jobs decreases. When counting the number of observations for each unemployment rate we can see the rate stood the most months at 5.4 and 5.5% and ranged from 4.6 to 12.6 (URateSJ.png)
+The final plots relate to total jobs and the unemployment rate (UnempRateJob.png) there is a clear negative correlation between the total number of jobs and the unemployment rate. As the uemployment rate increases the total number of jobs decreases. When counting the number of observations for each unemployment rate we can see the rate stood the most months at 5.4 and 5.5% and ranged from 4.6 to 12.6 (URateSJ.png)
 ```{r}
 library(ggplot2)
 library(ggthemes)
