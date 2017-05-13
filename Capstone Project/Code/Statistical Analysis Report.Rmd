@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 ```
 
-### Statistical Analysis Report for Ch.6
+### Statistical Analysis Report for Ch.5
 
 The first time series of home prices (AvgHomePrice.png) shows the slide of home prices during the financial crises. Some observations are the second drop in prices a few years after the financial crises and the subequent rebound in more recent years to pre-resession levels. There also seems to be a annual seasonal trend with prices rising in the beginning of the year then falling again at the end of the year. (AvgHomePriceLine.png)
 
