@@ -16,12 +16,13 @@ home_prices     <- read.csv("Data/home_prices.csv")
 total_jobs      <- read.csv("Data/total_jobs.csv")
 unemployment    <- read.csv("Data/unemployment.csv")
 apt_rents       <- read.csv("Data/apt_rents.csv")
+mortgagerates   <- read.csv("Data/mortgagerates.csv")
 jobs_by_sector  <- tbl_df(jobs_by_sector)
 home_prices     <- tbl_df(home_prices)
 total_jobs      <- tbl_df(total_jobs)
 unemployment    <- tbl_df(unemployment)
 apt_rents       <- tbl_df(apt_rents)
-
+mortgagerates   <- tbl_df(mortgagerates)
 ```
 
 ## Data Wrangling
@@ -85,8 +86,14 @@ apt_rents$Date <- paste0("01/", apt_rents$Date)
 apt_rents$Date <- apt_rents$Date %>% 
     as.Date(format = "%d/%m/%Y", "%b/%d/%Y")
 
+# Cleaninging up mortgage rates 
+colnames(mortgagerates)[1] <- "Date"
+colnames(mortgagerates)[2] <- "Rates"
+mortgagerates$Date <- mortgagerates$Date %>% 
+    as.Date(format = "%Y-%m-%d", "%b/%d/%Y")
+
 # Combine all df and arrange by desending date
-clean_df <- join_all(list(jobs_by_sector,apt_rents,home_prices,total_jobs,unemployment), by="Date", type="left")
+clean_df <- join_all(list(jobs_by_sector,apt_rents,home_prices,total_jobs,unemployment, mortgagerates), by="Date", type="left")
 clean_df <- arrange(clean_df, desc(Date))
 
 ```
@@ -114,4 +121,3 @@ colnames(clean_df)[11] <- "URateSJMetro"
 write.csv(clean_df, file = "Data/clean_df.csv")
 
 ```
-Data Discovery
