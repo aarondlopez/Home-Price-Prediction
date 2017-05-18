@@ -11,23 +11,40 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### 1. Problem: Housing affordability in San Jose
 
-  Affordable housing is a major concern in the Bay Area of California. Many people are priced out of affordable housing options where the median home price has reached close to $1 million in San Jose. This trend impacts low and median income families looking to secure home ownership. Politicians and voters have voiced their concerns and willingness to address this issue by approving new policies at the ballot box. Last November voters passed Measure A allowing the city to issue \$950 million in new bonds for affordable housing.^1^ The current mayor of San Jose, Sam Liccardo, has said San Jose is facing an affordable housing crises.^2^ To help address this issue I'd like to take a look at recent median home price trends and also predict how prices will change in the near term. This information will help to keep track of affordability and give insights into the effectivness of government policy changes. 
+  Affordable housing is a major concern in the Bay Area of California. Many people are priced out of affordable housing options where the median home price has reached close to $1 million in San Jose. This trend impacts low and median income families looking to secure home ownership. Politicians and voters have voiced their concerns and willingness to address this issue by approving new policies at the ballot box. Last November voters passed Measure A allowing the city to issue \$950 million in new bonds for affordable housing.^1^ The current mayor of San Jose, Sam Liccardo, has said San Jose is facing an affordable housing crises.^2^ To help address this issue I'd like to take a look at recent median home price trends and also predict how prices will change in the near term. This information will help to keep track of affordability and give insights into the effectiveness of government policy changes. 
 
 ### 2. Data
 
-  The main source of data will be from the City of San Jose <http://data.sanjoseca.gov/home>. Economic and labor data including unemployment, total jobs, jobs by sector, median home prices, median rental prices will all be utilized along with broader economic data such as average mortgage rates from FRED <https://fred.stlouisfed.org/graph/?g=NUh#0>. The most important fields of the data set will be median home prices for a single family home, labor data, and 30-year mortgage rates. All these fields should give the most insight into historical median home prices and some of the economic conditions driving prices. Of course there are many socioeconomic factors both mico and macro that drive home prices for any one area, I limited the data to the most revelant provided by the city of San Jose. With more time and resources it would be ideal to analyze dozens of variables to give the most insight. Due to the limited amount of variables it may be difficult to pinpoint specific drivers of median home prices or predict future prices accurately. 
+  The main source of data will be from the City of San Jose <http://data.sanjoseca.gov/home>. Economic and labor data including unemployment, total jobs, jobs by sector, median home prices, median rental prices will all be utilized along with broader economic data such as average mortgage rates from FRED <https://fred.stlouisfed.org/graph/?g=NUh#0>. The most important fields of the data set will be median home prices for a single family home, labor data, and 30-year mortgage rates. All these fields should give the most insight into historical median home prices and some of the economic conditions driving prices. Of course there are many socioeconomic, microeconomic, and macroeconomic factors that drive home prices for any one area, I limited the data to the most relevant provided by the city of San Jose. With more time and resources it would be ideal to analyze dozens of variables to give the most insight. Due to the limited amount of variables it may be difficult to pinpoint specific drivers of median home prices or predict future prices accurately. 
   
   
 ### 3. Wrangling
 
+Data was mainly sourced from the city of San Jose and was relatively clean. I used the following libraries to manipulate and arrange six different cvs files containing historical data for average home prices, average rental prices, total jobs, total jobs by sector, unemployment, and average mortgage rates. 
+
+* library(dplyr)
+* library(tidyr)
+* library(reshape2)
+* library(plyr)
+
+Jobs by sector data required the most clean up. It was the only file not in the same format most likely because it was the only character based data. I had to first melt the data to get the dates in a column, then spread the data by job sector to rename each sector, and finally gather the data to create the new JobSector variable consisting of all the newly named job sectors as factors. All other data frames required minimal clean up to formatting before converting data types to date and numeric. The final step was to join all data frames together by date for the final clean data frame that was used for preliminary exploration.
 
 ### 4. Preliminary Exploration and Findings
+
+The first time series of home prices (AvgHomePrice.png) shows the slide of home prices during the financial crises. Some observations are the second drop in prices a few years after the financial crises and the subsequent rebound in more recent years to pre-recession levels. There also seems to be a annual seasonal trend with prices rising in the beginning of the year then falling again at the end of the year. (AvgHomePriceLine.png)
+
+The second set of time series shows total number of jobs by sector (JobSector.png). Education, Business, and Trade are the top sectors in terms of number of jobs. Education also shows strong seasonal trends with summer months as school is not in session and there are less teaching jobs (EducationSector.png)
+
+The third set of plots relate to total jobs and the unemployment rate (UnempRateJob.png) there is a clear negative correlation between the total number of jobs and the unemployment rate. As the unemployment rate increases the total number of jobs decreases. When counting the number of observations for each unemployment rate we can see the rate stood the most months at 5.4 and 5.5% and ranged from 4.6 to 12.6 (URateSJ.png)
+
+Lastly, a final time series plotting average 30-year mortgage rates shows a historical fall in rates since 2008 that bottomed in late 2012 and have remained range bound between 3.5 and 4.5% since. This may have helped the rise in average home prices recently as lower rates create a more favorable lending environment for borrowers to purchase homes (Rates.png)
 
 
 ### 5. Approach
   
-  From exploration of the data there are a couple of approaches I'd like to take to gain insight into which variables are driving median home values and prediction of median home values going forward. For the former I'll use regression analysis to determine which variables are best at predicting median home prices. My expectation is the labor data may be a leading indicator while mortage prices will be a lagging indicator. For prediction of median home prices going forward I'll use a prediction model based on the historical median home price values over the last 10 years. The model should be able to predict median home values with a high level of confidence in the short term. 
+  From exploration of the data there are a couple of approaches I'd like to take to gain insight into which variables are driving median home values and prediction of median home values going forward. For the former I'll use regression analysis to determine which variables are best at predicting median home prices. My expectation is the labor data may be a leading indicator while mortgage prices will be a lagging indicator. For prediction of median home prices going forward I'll use a prediction model based on the historical median home price values over the last 10 years. The model should be able to predict median home values with a high level of confidence in the short term. 
 
 #### References
 1. <http://yesonaffordablehousing.org/>
 2. <http://www.sanjoseca.gov/index.aspx?NID=5256>
+

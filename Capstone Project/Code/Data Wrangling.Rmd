@@ -5,7 +5,7 @@ date: "4/18/2017"
 output: html_document
 ---
 
-## Load Data and Libraries...
+## Load Data and Libraries
 
 ```{r message=FALSE}
 library(dplyr)
@@ -125,5 +125,4 @@ str(clean_df)
 
 # Create final new csv file
 write.csv(clean_df, file = "Data/clean_df.csv")
-
 ```
