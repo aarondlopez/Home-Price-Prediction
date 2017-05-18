@@ -6,6 +6,7 @@ output: html_document
 ---
 
 ## Load Data and Libraries...
+
 ```{r message=FALSE}
 library(dplyr)
 library(tidyr)
@@ -26,25 +27,18 @@ mortgagerates   <- tbl_df(mortgagerates)
 ```
 
 ## Data Wrangling
-Clean up jobs_by_secotr df
+
 ```{r, message=FALSE}
 # Bring column names (dates) into a unique column so table is in long format
 jobs_by_sector <- melt(jobs_by_sector, variable.name = "Sector")
 
-# Rename Second column to reflect dates in the row
+# Rename column to correct variable name
 colnames(jobs_by_sector)[2] <- "Date"
 
 # Move sector names into column names moving the table back to wide format
 jobs_by_sector <- spread(jobs_by_sector, Sector, value)
 
-# Changing dates from string to date format. as.Date returns NA for "Sept" abbreviation so first we'll change that to "Sep"
-jobs_by_sector$Date <- gsub("Sept", "Sep", jobs_by_sector$Date)
-
-# Adding a day
-jobs_by_sector$Date <- paste0("01.", jobs_by_sector$Date)
-jobs_by_sector$Date <- as.Date(jobs_by_sector$Date, format = "%d.%b.%Y", "%b/%d/%Y")
-
-# Setup column names for gather function 
+# Rename column names to be short and concise
 colnames(jobs_by_sector)[3] <- "Education"
 colnames(jobs_by_sector)[4] <- "Finance"
 colnames(jobs_by_sector)[6] <- "Hospitality"
@@ -53,18 +47,26 @@ colnames(jobs_by_sector)[9] <- "Other"
 colnames(jobs_by_sector)[10] <- "Business"
 colnames(jobs_by_sector)[11] <- "Public"
 colnames(jobs_by_sector)[12] <- "Trade"
+
+# Changing dates from string to date format. as.Date returns NA for "Sept" abbreviation so first we'll change that to "Sep"
+jobs_by_sector$Date <- gsub("Sept", "Sep", jobs_by_sector$Date)
+# Adding a day
+jobs_by_sector$Date <- paste0("01.", jobs_by_sector$Date)
+# Format date 
+jobs_by_sector$Date <- as.Date(jobs_by_sector$Date, format = "%d.%b.%Y", "%b/%d/%Y")
+
+# Setup column names for gather function to put back into long format
 jobs_by_sector <- jobs_by_sector %>% 
   gather(Construction, Education, Finance, Information, Hospitality, 
          Manufacturing, Mining, Other, Business, Public, Trade, Unclassified, 
          key = "JobSector", value = "NumJobs")
 
-```
-Clean up dates for all other dfs
-```{r, message=FALSE}
-# Step 1 "Sept" replaced with "Sep"
+head(jobs_by_sector)
+
+# Setting up dates "Sept" replaced with "Sep"
 home_prices$Date <- gsub("Sept", "Sep", home_prices$Date)
 
-# Step 2 adding a day then format to date
+# Adding a day then format to date
 home_prices$Date <- home_prices$Date %>% 
     paste("01", sep = " ") %>% 
     as.Date(format = "%b %Y %d", "%b/%d/%Y")
@@ -86,28 +88,30 @@ apt_rents$Date <- paste0("01/", apt_rents$Date)
 apt_rents$Date <- apt_rents$Date %>% 
     as.Date(format = "%d/%m/%Y", "%b/%d/%Y")
 
-# Cleaninging up mortgage rates 
+# Cleaninging up mortgage rates with more consies variable names then date format
 colnames(mortgagerates)[1] <- "Date"
 colnames(mortgagerates)[2] <- "Rates"
 mortgagerates$Date <- mortgagerates$Date %>% 
     as.Date(format = "%Y-%m-%d", "%b/%d/%Y")
 
-# Combine all df and arrange by desending date
+# Combine all data frames by date nd arranging in desending order
 clean_df <- join_all(list(jobs_by_sector,apt_rents,home_prices,total_jobs,unemployment, mortgagerates), by="Date", type="left")
 clean_df <- arrange(clean_df, desc(Date))
 
-```
-Removing "$" and commas "," then converting all data types to numeric
-```{r}
+# Cleaning up some formating to convert data types to numeric by removing dollar signs and commas
 clean_df$Condo.Townhome <- gsub("\\$|,", "", clean_df$Condo.Townhome)
 clean_df$Single.Family.Home <- gsub("\\$|,", "", clean_df$Single.Family.Home)
 clean_df$X2.bedroom <- gsub("*,", "", clean_df$X2.bedroom)
 clean_df$X1.Bedroom <- gsub("*,", "", clean_df$X1.Bedroom)
 clean_df$Average <- gsub("*,", "", clean_df$Average)
+
+# Converting integers to numeric across variables
 clean_df[3:9] <- lapply(clean_df[3:9], as.numeric)
+
+# Converting job secotrs from characters to factors
 clean_df$JobSector <- as.factor(clean_df$JobSector)
 
-# Renaming variables with more descrptive names
+# Renaming variables with more descrptive concise names
 colnames(clean_df)[4] <- "AvgAptRent"
 colnames(clean_df)[5] <- "Avg1bdAptRent"
 colnames(clean_df)[6] <- "Avg2bdAptRent"
@@ -117,7 +121,9 @@ colnames(clean_df)[9] <- "TotalJobs"
 colnames(clean_df)[10] <- "URateSJ"
 colnames(clean_df)[11] <- "URateSJMetro"
 
-# Create new csv file
+str(clean_df)
+
+# Create final new csv file
 write.csv(clean_df, file = "Data/clean_df.csv")
 
 ```
