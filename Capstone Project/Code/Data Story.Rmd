@@ -42,7 +42,7 @@ Lastly, a final time series plotting average 30-year mortgage rates shows a hist
 
 ### 5. Approach
   
-  From exploration of the data there are a couple of approaches I'd like to take to gain insight into which variables are driving median home values and prediction of median home values going forward. For the former I'll use regression analysis to determine which variables are best at predicting median home prices. My expectation is the labor data may be a leading indicator while mortgage prices will be a lagging indicator. For prediction of median home prices going forward I'll use a prediction model based on the historical median home price values over the last 10 years. The model should be able to predict median home values with a high level of confidence in the short term. 
+  From exploration of the data there are a couple of approaches I'd like to take to gain insight into which variables are driving median home values and how median home prices will change going forward. I'll use a time series model and regression analysis to determine which variables are best at predicting median home prices. My expectation is the labor data and mortgage rates will be the best indicators. The model should be able to predict median home values with a high level of confidence in the short term. Based on the analysis I will use which ever method has the highest level of confidence. 
 
 #### References
 1. <http://yesonaffordablehousing.org/>
