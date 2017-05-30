@@ -31,9 +31,11 @@ ggplot(clean_df, aes(Date, AvgPriceHome/1000)) + geom_point() + geom_smooth()
 ggplot(clean_df, aes(Date, AvgPriceHome)) + geom_line()
 
 # Time series of jobs by sector 2008-2016
- ggplot(clean_df, aes(Date, NumJobs, col = JobSector)) + geom_point()
+ggplot(clean_df, aes(Date, NumJobs, col = JobSector)) + geom_point()
+# Box plot of jobs by sector
+ggplot(data=clean_df, aes(x=JobSector, y=NumJobs, group=JobSector, fill=JobSector)) + geom_boxplot() + coord_flip() + guides(fill=FALSE)
 # Time series of Education sector jobs with visable seasonality
- ggplot(subset(clean_df, JobSector=="Education")) + geom_point(aes(Date, NumJobs, col = JobSector))
+ggplot(subset(clean_df, JobSector=="Education")) + geom_point(aes(Date, NumJobs, col = JobSector))
 
 # Total jobs and unemployment rate
 ggplot(clean_df, aes(URateSJ, TotalJobs)) + geom_point()
