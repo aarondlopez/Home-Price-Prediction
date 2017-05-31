@@ -9,7 +9,16 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+### How do you frame your main question as a machine learning problem? Is it a supervised or     unsupervised problem? If it is supervised, is it a regression or a classification?
+#### Machine learning will be used to predict the average price of a single family home into the near future. This is a supervised learning problem and I'll be using both linear regression and time series analysis models. The models will then be compared to come up with the best overal model. 
 
-```
+### What are the main features (also called independent variables or predictors) that you'll use?
+#### The main features that I will use are average apartment rents, average condo prices, San Jose unemployment rate, and average 30-year mortgage rates.
+
+### Which machine learning technique will you use?
+#### I would like to compare both a linear regression model to a time series model for predicting short term average home prices. I will then compare the time series model to the best linear regression model to determine which technique is the most insightful.
+
+### How will you evaluate the success of your machine learning technique? What metric will you use?
+#### For the linear regression model I'll use the best fit model with the best adjusted r squared comparing multiple models with different feature combinations. Time series...
+
 
