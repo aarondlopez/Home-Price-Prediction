@@ -23,5 +23,4 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 .Rproj.user
-Titanic_Exercise.html
-CHIS.html
+*.html
