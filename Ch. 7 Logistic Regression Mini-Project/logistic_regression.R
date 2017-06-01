@@ -109,17 +109,27 @@ NH11$everwrk <- factor(NH11$everwrk, levels=c("2 No", "1 Yes"))
 str(NH11$r_maritl)
 levels(NH11$r_maritl)
 #modify r_maritl to exclude unknown categories or underage instances
-NH11$r_maritl <- factor(NH11$r_maritl, levels=c("1 Married - spouse in household", 
-                                                "2 Married - spouse not in household",
-                                                "4 Widowed", 
-                                                "5 Divorced", 
-                                                "6 Separated", 
-                                                "7 Never married"))
+NH11$r_maritl <- droplevels(NH11$r_maritl)
+levels(NH11$r_maritl)
+
 #create our model
 work.mod <- glm(everwrk ~ age_p+r_maritl, data=NH11, family="binomial")
 summary(work.mod)
 ##   2. Predict the probability of working for each level of marital
 ##      status.
+# creating a data frame to list all the probabilities of working for each level of marital status,
+# probabilities in percentages are listed under fit. 
+data.frame(effect("r_maritl", work.mod))
+#                           r_maritl       fit         se     lower     upper
+#     1 Married - spouse in household 0.8917800 0.04413754 0.8831439 0.8998502
+# 2 Married - spouse not in household 0.8868918 0.21326041 0.8377247 0.9225394
+#                           4 Widowed 0.8061891 0.06806325 0.7844913 0.8261864
+#                          5 Divorced 0.9447561 0.10272953 0.9332564 0.9543712
+#                         6 Separated 0.9035358 0.14579706 0.8755978 0.9257318
+#                     7 Never married 0.8538900 0.05978759 0.8386559 0.8679122
+#               8 Living with partner 0.9277504 0.13285112 0.9082334 0.9433753
+#            9 Unknown marital status 0.8472992 0.49100994 0.6794427 0.9355916
+
 #plot probability of every working for each type of marital status. 
 plot(effect("r_maritl",work.mod))
 #Divorce and separated have the higest probability and widowed has the lowest. 
