@@ -19,6 +19,6 @@ knitr::opts_chunk$set(echo = TRUE)
 #### I would like to compare both a linear regression model to a time series model for predicting short term average home prices. I will then compare the time series model to the best linear regression model to determine which technique is the most insightful.
 
 ### How will you evaluate the success of your machine learning technique? What metric will you use?
-#### The dataset will be split into a seperate training and testing data set to compare models. Each model will be built using the training data then the best model will be determined by its ability to accurately predict the actual average median home price in the testing data set. 
+#### The dataset will be split into a seperate training and testing data set to compare models. Each model will be built using the training data then the best model will be determined by its ability to accurately predict actual average median home prices in the testing data set. 
 
 
