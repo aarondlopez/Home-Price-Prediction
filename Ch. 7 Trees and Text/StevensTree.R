@@ -56,7 +56,24 @@ table(Test$Reverse, PredictForest)
 #[1] 0.6705882
 # The model accurately predicted 67% of the actual outcomes, better than the CART Model at 65%
 
+# cross validation to choose the best parameter value in the model
+library(caret)
+library(e1071)
 
+fitControl <- trainControl(method="cv", number=10)
+cartGrid <- expand.grid(.cp=(1:50)*0.01)
+train(Reverse~Circuit + Issue + Petitioner + Respondent + LowerCourt + Unconst, data = Train, method = "rpart", trControl=fitControl, tuneGrid = cartGrid)
+#Shows accuracy for each level of fold, at the bottom of the output you'll see the optimal cp value to use in the model
+#Accuracy was used to select the optimal model using  the largest value.
+#The final value used for the model was cp = 0.18.
 
-
-
+StevensTreeCV = rpart(Reverse~Circuit + Issue + Petitioner + Respondent + LowerCourt + Unconst, method="class", data=Train, control = rpart.control(cp=0.18))
+PredictCV = predict(StevensTreeCV, newdata=Test, type="class")
+table(Test$Reverse, PredictCV)
+PredictCV
+#   0  1
+#0 59 18
+#1 29 64
+(59+64)/(59+18+29+64)
+#[1] 0.7235294
+# This model has the highest accuracy at 72%
