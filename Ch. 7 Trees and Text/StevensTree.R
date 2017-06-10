@@ -70,7 +70,6 @@ train(Reverse~Circuit + Issue + Petitioner + Respondent + LowerCourt + Unconst, 
 StevensTreeCV = rpart(Reverse~Circuit + Issue + Petitioner + Respondent + LowerCourt + Unconst, method="class", data=Train, control = rpart.control(cp=0.18))
 PredictCV = predict(StevensTreeCV, newdata=Test, type="class")
 table(Test$Reverse, PredictCV)
-PredictCV
 #   0  1
 #0 59 18
 #1 29 64
