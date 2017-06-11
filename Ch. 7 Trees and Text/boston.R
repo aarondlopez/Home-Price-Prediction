@@ -83,7 +83,7 @@ library(e1071)
 # using 10 folds
 tr.control = trainControl(method="cv", number = 10)
 # create a grid of all the cp values we want the model to try
-cp.grid = expand.grid(.cp = (0:10)*0.001)
+cp.grid = expand.grid(.cp = (0:50)*0.01)
 tr = train(MEDV ~ LAT + LON + CRIM + ZN + INDUS + CHAS + NOX + RM + AGE + DIS + RAD + TAX + PTRATIO, data = train, method = "rpart", trControl = tr.control, tuneGrid = cp.grid)
 tr
 # RMSE was used to select the optimal model using  the smallest value.

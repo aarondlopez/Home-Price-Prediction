@@ -19,3 +19,23 @@ treereg.pred = predict(treereg, newdata = test)
 treereg.rmse = sqrt(mean((treereg.pred - test$AvgPriceHome)^2))
 treereg.rmse
 # [1] 24843.1
+
+# cross validation using complexity parameter (cp)
+library(caret)
+library(e1071)
+# using 10 folds 
+tr.control = trainControl(method="cv", number = 10)
+# create a grid for all cp values to try
+cp.grid = expand.grid(.cp=(0:10)*0.001)
+treebest <- train(AvgPriceHome~NumJobs+AvgAptRent+Avg1bdAptRent+Avg2bdAptRent+AvgPriceCondo+TotalJobs+URateSJ+URateSJMetro+Rates, data=train, method = "rpart", trControl = tr.control, tuneGrid = cp.grid)
+treebest
+# RMSE was used to select the optimal model using  the smallest value.
+# The final value used for the model was cp = 0.
+treebest <- treebest$finalModel
+prp(treebest)
+best.tree.pred = predict(treebest, newdata = test)
+best.tree.rmse = sqrt(mean((best.tree.pred - test$AvgPriceHome)^2))
+best.tree.rmse
+# [1] 3591.5
+
+
