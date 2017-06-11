@@ -1,0 +1,17 @@
+---
+title: "Predicting San Jose Home Prices"
+author: "Aaron Lopez"
+date: "6/11/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Project Description
+## Data Set
+## Exploratory Analysis
+## Model Building
+## Results and Discussion
+## Appendix
