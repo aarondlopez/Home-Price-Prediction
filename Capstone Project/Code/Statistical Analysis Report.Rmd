@@ -24,21 +24,24 @@ library(ggthemes)
 library(tidyr)
 library(dplyr)
 
+# Looking at correlations 
+cor(clean_df[3:12], use="complete.obs")
 
 # Time series of avergae home prices
 ggplot(clean_df, aes(Date, AvgPriceHome/1000)) + geom_point() + geom_smooth()
+
 # Time series of average home prices line, drop off at the end of each year. Best time to buy a home?
 ggplot(clean_df, aes(Date, AvgPriceHome)) + geom_line()
 
 # Time series of jobs by sector 2008-2016
 ggplot(clean_df, aes(Date, NumJobs, col = JobSector)) + geom_point()
+
 # Box plot of jobs by sector
 ggplot(data=clean_df, aes(x=JobSector, y=NumJobs, group=JobSector, fill=JobSector)) + geom_boxplot() + coord_flip() + guides(fill=FALSE)
-# Time series of Education sector jobs with visable seasonality
-ggplot(subset(clean_df, JobSector=="Education")) + geom_point(aes(Date, NumJobs, col = JobSector))
 
-# Total jobs and unemployment rate
-ggplot(clean_df, aes(URateSJ, TotalJobs)) + geom_point()
+# Time series of Education sector jobs with visable seasonality
+ggplot(subset(clean_df, JobSector=="Education")) + geom_line(aes(Date, NumJobs, col = JobSector))
+
 # Histogram of San Jose unemployment rate
 ggplot(clean_df, aes(URateSJ, fill = cut(URateSJ, 25))) + geom_histogram(show.legend = FALSE, bins = 25) + scale_fill_discrete(h = c(240, 100))
 
