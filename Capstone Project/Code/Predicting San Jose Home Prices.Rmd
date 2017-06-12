@@ -10,8 +10,31 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Project Description
+
+Affordable housing is a major concern in the Bay Area of California. Many people are priced out of affordable housing options where the median home price has reached close to $1 million in San Jose. This trend impacts low and median income families looking to secure home ownership. Politicians and voters have voiced their concerns and willingness to address this issue by approving new policies at the ballot box. Last November voters passed Measure A allowing the city to issue \$950 million in new bonds for affordable housing.^1^ The current mayor of San Jose, Sam Liccardo, has said San Jose is facing an affordable housing crises.^2^ To help address this issue I'd like to take a look at recent median home price trends and also predict how prices will change in the near term. This information will help to keep track of affordability and give insights into the effectiveness of government policy changes. 
+  
+There are two major client groups. First, the city of San Jose who has made housing affordability a priority as the city continues to grow and city officials create urban planning policy. Politicians have expressed their desire to introduce an impliment policy to make housing more affordable for low and middle income residents. Understanding the trend and where housing prices are headed will help politicians determine what policy may be needed or developed. The second group of clients would be low and median income individuals seeking to find affordable housing and deciding when and if San Jose home price are affordable today or in the near future. This information can help them make an infored decision on when and if to purchase a home in the near future. 
+  
 ## Data Set
+
+The main source of data will be from the City of San Jose <http://data.sanjoseca.gov/home>. Economic and labor data including unemployment, total jobs, jobs by sector, median home prices, median rental prices will all be utilized along with broader economic data such as average mortgage rates from FRED <https://fred.stlouisfed.org/graph/?g=NUh#0>. The City of San Jose also keeps data on affordable housing units within the city that will be useful to incorporate if the data is complete and comprehensive. 
+
 ## Exploratory Analysis
+
+The first time series of home prices (AvgHomePrice.png) shows the slide of home prices during the financial crises. Some observations are the second drop in prices a few years after the financial crises and the subsequent rebound in more recent years to pre-recession levels. There also seems to be a annual seasonal trend with prices rising in the beginning of the year then falling again at the end of the year. (AvgHomePriceLine.png)
+
+The second set of time series shows total number of jobs by sector (JobSector.png). Education, Business, and Trade are the top sectors in terms of number of jobs. Education also shows strong seasonal trends with summer months as school is not in session and there are less teaching jobs (EducationSector.png)
+
+The third set of plots relate to total jobs and the unemployment rate (UnempRateJob.png) there is a clear negative correlation between the total number of jobs and the unemployment rate. As the unemployment rate increases the total number of jobs decreases. When counting the number of observations for each unemployment rate we can see the rate stood the most months at 5.4 and 5.5% and ranged from 4.6 to 12.6 (URateSJ.png)
+
+Lastly, a final time series plotting average 30-year mortgage rates shows a historical fall in rates since 2008 that bottomed in late 2012 and have remained range bound between 3.5 and 4.5% since. This may have helped the rise in average home prices recently as lower rates create a more favorable lending environment for borrowers to purchase homes (Rates.png)
+
 ## Model Building
+
 ## Results and Discussion
+
 ## Appendix
+
+#### References
+1. <http://yesonaffordablehousing.org/>
+2. <http://www.sanjoseca.gov/index.aspx?NID=5256>
