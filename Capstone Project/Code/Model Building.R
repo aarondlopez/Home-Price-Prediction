@@ -13,6 +13,7 @@ linereg.pred = predict(linereg, newdata = test)
 linereg.rmse = sqrt(mean((linereg.pred - test$AvgPriceHome)^2))
 linereg.rmse
 # [1] 42637.19
+
 # create regression tree model
 treereg <- rpart(AvgPriceHome~AvgAptRent+URateSJ+Rates, data = train)
 prp(treereg)
