@@ -1,11 +1,12 @@
-clean_df_rmna <- na.omit(clean_df)
-
+library(rpart)
+library(rpart.plot)
+library(caTools)
 # Test models
 set.seed(123)
 # create test and train data sets
-split = sample.split(clean_df_rmna$AvgPriceHome, SplitRatio = 0.7)
-train = subset(clean_df_rmna, split==TRUE)
-test = subset(clean_df_rmna, split==FALSE)
+split = sample.split(clean_df$AvgPriceHome, SplitRatio = 0.7)
+train = subset(clean_df, split==TRUE)
+test = subset(clean_df, split==FALSE)
 # create linear regression model
 linereg <- lm(AvgPriceHome~AvgAptRent+URateSJ+Rates, data = train)
 linereg.pred = predict(linereg, newdata = test)
@@ -39,3 +40,4 @@ best.tree.rmse
 # [1] 3591.5
 
 # time-series model
+
