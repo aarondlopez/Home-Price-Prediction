@@ -39,5 +39,12 @@ best.tree.rmse = sqrt(mean((best.tree.pred - test$AvgPriceHome)^2))
 best.tree.rmse
 # [1] 3591.5
 
-# time-series model
-
+# time-series model ARIMA models aim to describe the autocorrelations in the data, housing data is not stationary
+ts <- xts(clean_df$AvgPriceHome, clean_df$Date)
+fit <- auto.arima(ts, seasonal = F)
+ts <- unique(ts)
+fit <- auto.arima(ts, seasonal = F)
+plot(forecast(fit))
+accuracy(fit)
+#                   ME     RMSE      MAE        MPE     MAPE      MASE       ACF1
+# Training set 7.269227 25044.42 21148.19 -0.1386556 3.518458 0.9839578 0.06864566
