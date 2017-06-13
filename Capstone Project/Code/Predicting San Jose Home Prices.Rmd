@@ -11,13 +11,153 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Project Description
 
-Affordable housing is a major concern in the Bay Area of California. Many people are priced out of affordable housing options where the median home price has reached close to $1 million in San Jose. This trend impacts low and median income families looking to secure home ownership. Politicians and voters have voiced their concerns and willingness to address this issue by approving new policies at the ballot box. Last November voters passed Measure A allowing the city to issue \$950 million in new bonds for affordable housing.^1^ The current mayor of San Jose, Sam Liccardo, has said San Jose is facing an affordable housing crises.^2^ To help address this issue I'd like to take a look at recent median home price trends and also predict how prices will change in the near term. This information will help to keep track of affordability and give insights into the effectiveness of government policy changes. 
+Affordable housing is a major concern in the Bay Area of California. Many people are priced out of affordable housing options where the median home price has reached $1 million in San Jose, California.^1^ This trend impacts low and median income families looking to secure home ownership. Politicians and voters have voiced their concerns and willingness to address this issue by approving new policies at the ballot box. Last November voters passed Measure A allowing the city to issue \$950 million in new bonds for affordable housing.^1^ The current mayor of San Jose, Sam Liccardo, has said, "San Jose is facing an affordable housing crises."^2^ To help address this issue I'd like to take a look at recent median home price trends and also predict how prices will change in the near term. This information will help to keep track of affordability and give insights into the effectiveness of government policy changes.
   
 There are two major client groups. First, the city of San Jose who has made housing affordability a priority as the city continues to grow and city officials create urban planning policy. Politicians have expressed their desire to introduce an impliment policy to make housing more affordable for low and middle income residents. Understanding the trend and where housing prices are headed will help politicians determine what policy may be needed or developed. The second group of clients would be low and median income individuals seeking to find affordable housing and deciding when and if San Jose home price are affordable today or in the near future. This information can help them make an infored decision on when and if to purchase a home in the near future. 
+
+To predict near term median home prices I will use three different model approaches, linear regression, time-series (ARIMA), and regression tree. I will then compare each model to actual median home prices from a test data set. Data will be used from the city of San Jose outlined below.
   
 ## Data Set
 
-The main source of data will be from the City of San Jose <http://data.sanjoseca.gov/home>. Economic and labor data including unemployment, total jobs, jobs by sector, median home prices, median rental prices will all be utilized along with broader economic data such as average mortgage rates from FRED <https://fred.stlouisfed.org/graph/?g=NUh#0>. The City of San Jose also keeps data on affordable housing units within the city that will be useful to incorporate if the data is complete and comprehensive. 
+The main source of data will be from the City of San Jose <http://data.sanjoseca.gov/home>. Economic and labor data including unemployment, total jobs, jobs by sector, median home prices, median rental prices will all be utilized along with broader economic data such as average mortgage rates from FRED <https://fred.stlouisfed.org/graph/?g=NUh#0>. The data set is approximately 6 years of monthly data from 2009-2015 after merging and cleaning up any missing values. There are 6 csv files all under the "Data" file. 
+
+apt_rents.csv
+home_prices.csv
+jobs_by_sector.csv
+mortgagerates.csv
+total_jobs.csv
+unemployment.csv
+
+San Jose provides relatively clean uniform data however it can be a little outdated and incomplete. I would have like to include crime data but this was missing at the time of my analysis and a time frame for requesting the data was uncertain. Including this information may be useful in further analyizing median home price trends.
+
+## Data Wrangling
+
+The main steps to cleaning up the data were simplifying the variable names, formatting strings, and converting objects. The city of San Jose has some consistency in their data sets but to combine all the data I had to do some clean up of individual csv files before combining it all into one data frame for analysis. 
+
+```{r message=FALSE}
+# Load Data and Libraries
+
+library(dplyr)
+library(tidyr)
+library(reshape2)
+library(plyr)
+jobs_by_sector  <- read.csv("Data/jobs_by_sector.csv")
+home_prices     <- read.csv("Data/home_prices.csv")
+total_jobs      <- read.csv("Data/total_jobs.csv")
+unemployment    <- read.csv("Data/unemployment.csv")
+apt_rents       <- read.csv("Data/apt_rents.csv")
+mortgagerates   <- read.csv("Data/mortgagerates.csv")
+jobs_by_sector  <- tbl_df(jobs_by_sector)
+home_prices     <- tbl_df(home_prices)
+total_jobs      <- tbl_df(total_jobs)
+unemployment    <- tbl_df(unemployment)
+apt_rents       <- tbl_df(apt_rents)
+mortgagerates   <- tbl_df(mortgagerates)
+
+# Bring column names (dates) into a unique column so table is in long format
+jobs_by_sector <- melt(jobs_by_sector, variable.name = "Sector")
+
+# Rename column to correct variable name
+colnames(jobs_by_sector)[2] <- "Date"
+
+# Move sector names into column names moving the table back to wide format
+jobs_by_sector <- spread(jobs_by_sector, Sector, value)
+
+# Rename column names to be short and concise
+colnames(jobs_by_sector)[3] <- "Education"
+colnames(jobs_by_sector)[4] <- "Finance"
+colnames(jobs_by_sector)[6] <- "Hospitality"
+colnames(jobs_by_sector)[8] <- "Mining"
+colnames(jobs_by_sector)[9] <- "Other"
+colnames(jobs_by_sector)[10] <- "Business"
+colnames(jobs_by_sector)[11] <- "Public"
+colnames(jobs_by_sector)[12] <- "Trade"
+
+# Changing dates from string to date format. as.Date returns NA for "Sept" 
+# abbreviation so first we'll change that to "Sep"
+jobs_by_sector$Date <- gsub("Sept", "Sep", jobs_by_sector$Date)
+# Adding a day
+jobs_by_sector$Date <- paste0("01.", jobs_by_sector$Date)
+# Format date 
+jobs_by_sector$Date <- as.Date(jobs_by_sector$Date, format = "%d.%b.%Y", "%b/%d/%Y")
+
+# Setup column names for gather function to put back into long format
+jobs_by_sector <- jobs_by_sector %>% 
+  gather(Construction, Education, Finance, Information, Hospitality, 
+         Manufacturing, Mining, Other, Business, Public, Trade, Unclassified, 
+         key = "JobSector", value = "NumJobs")
+
+head(jobs_by_sector)
+
+# Setting up dates "Sept" replaced with "Sep"
+home_prices$Date <- gsub("Sept", "Sep", home_prices$Date)
+
+# Adding a day then format to date
+home_prices$Date <- home_prices$Date %>% 
+    paste("01", sep = " ") %>% 
+    as.Date(format = "%b %Y %d", "%b/%d/%Y")
+
+# Same steps for total_jobs df
+total_jobs$Date <- gsub("Sept", "Sep", total_jobs$Date)
+total_jobs$Date <- total_jobs$Date %>%
+    paste("01", sep = " ") %>% 
+    as.Date(format = "%b %Y %d", "%b/%d/%Y")
+
+# Again for unemployment df
+unemployment$Date <- gsub("Sept", "Sep", unemployment$Date)
+unemployment$Date <- unemployment$Date %>%
+    paste("01", sep = " ") %>%
+    as.Date(format = "%b %Y %d", "%b/%d/%Y")
+
+# Slightly different strategy for apt_rents df. Dates are in integer format. 
+# First I added the day then converted to date format.
+apt_rents$Date <- paste0("01/", apt_rents$Date)
+apt_rents$Date <- apt_rents$Date %>% 
+    as.Date(format = "%d/%m/%Y", "%b/%d/%Y")
+
+# Cleaninging up mortgage rates with more consies variable names then date format
+colnames(mortgagerates)[1] <- "Date"
+colnames(mortgagerates)[2] <- "Rates"
+mortgagerates$Date <- mortgagerates$Date %>% 
+    as.Date(format = "%Y-%m-%d", "%b/%d/%Y")
+
+# Combine all data frames by date nd arranging in desending order
+clean_df <- join_all(list(jobs_by_sector,apt_rents,home_prices,total_jobs,
+                          unemployment, mortgagerates), by="Date", type="left")
+clean_df <- arrange(clean_df, desc(Date))
+
+# Cleaning up some formating to convert data types to numeric by removing dollar 
+# signs and commas
+clean_df$Condo.Townhome <- gsub("\\$|,", "", clean_df$Condo.Townhome)
+clean_df$Single.Family.Home <- gsub("\\$|,", "", clean_df$Single.Family.Home)
+clean_df$X2.bedroom <- gsub("*,", "", clean_df$X2.bedroom)
+clean_df$X1.Bedroom <- gsub("*,", "", clean_df$X1.Bedroom)
+clean_df$Average <- gsub("*,", "", clean_df$Average)
+
+# Converting integers to numeric across variables
+clean_df[3:9] <- lapply(clean_df[3:9], as.numeric)
+
+# Converting job secotrs from characters to factors
+clean_df$JobSector <- as.factor(clean_df$JobSector)
+
+# Renaming variables with more descrptive concise names
+colnames(clean_df)[4] <- "AvgAptRent"
+colnames(clean_df)[5] <- "Avg1bdAptRent"
+colnames(clean_df)[6] <- "Avg2bdAptRent"
+colnames(clean_df)[7] <- "AvgPriceHome"
+colnames(clean_df)[8] <- "AvgPriceCondo"
+colnames(clean_df)[9] <- "TotalJobs"
+colnames(clean_df)[10] <- "URateSJ"
+colnames(clean_df)[11] <- "URateSJMetro"
+
+clean_df <- na.omit(clean_df)
+
+# Create final new csv file
+write.csv(clean_df, file = "Data/clean_df.csv")
+
+# Summary of the final data frame
+str(clean_df)
+```
 
 ## Exploratory Analysis
 
@@ -29,6 +169,39 @@ The third set of plots relate to total jobs and the unemployment rate (UnempRate
 
 Lastly, a final time series plotting average 30-year mortgage rates shows a historical fall in rates since 2008 that bottomed in late 2012 and have remained range bound between 3.5 and 4.5% since. This may have helped the rise in average home prices recently as lower rates create a more favorable lending environment for borrowers to purchase homes (Rates.png)
 
+
+```{r}
+library(ggplot2)
+library(ggthemes)
+library(tidyr)
+library(dplyr)
+
+# Looking at correlations 
+cor(clean_df[3:12], use="complete.obs")
+
+# Time series of avergae home prices
+ggplot(clean_df, aes(Date, AvgPriceHome/1000)) + geom_point() + geom_smooth()
+
+# Time series of average home prices line, drop off at the end of each year. Best time to buy a home?
+ggplot(clean_df, aes(Date, AvgPriceHome)) + geom_line()
+
+# Time series of jobs by sector 2008-2016
+ggplot(clean_df, aes(Date, NumJobs, col = JobSector)) + geom_point()
+
+# Box plot of jobs by sector
+ggplot(data=clean_df, aes(x=JobSector, y=NumJobs, group=JobSector, fill=JobSector)) + geom_boxplot() + coord_flip() + guides(fill=FALSE)
+
+# Time series of Education sector jobs with visable seasonality
+ggplot(subset(clean_df, JobSector=="Education")) + geom_line(aes(Date, NumJobs, col = JobSector))
+
+# Histogram of San Jose unemployment rate
+ggplot(clean_df, aes(URateSJ, fill = cut(URateSJ, 25))) + geom_histogram(show.legend = FALSE, bins = 25) + scale_fill_discrete(h = c(240, 100))
+
+# Time series of average 30-year mortage rates 
+ggplot(clean_df, aes(Date, Rates)) + geom_point() + geom_smooth()
+
+```
+
 ## Model Building
 
 ## Results and Discussion
@@ -36,5 +209,6 @@ Lastly, a final time series plotting average 30-year mortgage rates shows a hist
 ## Appendix
 
 #### References
-1. <http://yesonaffordablehousing.org/>
-2. <http://www.sanjoseca.gov/index.aspx?NID=5256>
+1. <https://www.nar.realtor/sites/default/files/reports/2017/embargoes/2017-q1-metro-home-prices/metro-home-prices-q1-2017-single-family-2017-05-15.pdf>
+2. <http://yesonaffordablehousing.org/>
+3. <http://www.sanjoseca.gov/index.aspx?NID=5256>

@@ -38,4 +38,4 @@ best.tree.rmse = sqrt(mean((best.tree.pred - test$AvgPriceHome)^2))
 best.tree.rmse
 # [1] 3591.5
 
-
+# time-series model

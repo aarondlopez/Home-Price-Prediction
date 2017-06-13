@@ -121,6 +121,8 @@ colnames(clean_df)[9] <- "TotalJobs"
 colnames(clean_df)[10] <- "URateSJ"
 colnames(clean_df)[11] <- "URateSJMetro"
 
+clean_df <- na.omit(clean_df)
+
 str(clean_df)
 
 # Create final new csv file
