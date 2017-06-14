@@ -48,7 +48,6 @@ unemployment    <- read.csv("Data/unemployment.csv")
 apt_rents       <- read.csv("Data/apt_rents.csv")
 mortgagerates   <- read.csv("Data/mortgagerates.csv")
 jobs_by_sector  <- tbl_df(jobs_by_sector)
-home_prices     <- tbl_df(home_prices)
 total_jobs      <- tbl_df(total_jobs)
 unemployment    <- tbl_df(unemployment)
 apt_rents       <- tbl_df(apt_rents)
@@ -150,7 +149,12 @@ colnames(clean_df)[9] <- "TotalJobs"
 colnames(clean_df)[10] <- "URateSJ"
 colnames(clean_df)[11] <- "URateSJMetro"
 
+# removing missing data
 clean_df <- na.omit(clean_df)
+
+# adding a month variable for exploritory analyis
+month_prices <- c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
+clean_df$Month <- factor(format(clean_df$Date, "%b"), levels = month_prices)
 
 # Create final new csv file
 write.csv(clean_df, file = "Data/clean_df.csv")
@@ -161,45 +165,68 @@ str(clean_df)
 
 ## Exploratory Analysis
 
-The first time series of home prices (AvgHomePrice.png) shows the slide of home prices during the financial crises. Some observations are the second drop in prices a few years after the financial crises and the subsequent rebound in more recent years to pre-recession levels. There also seems to be a annual seasonal trend with prices rising in the beginning of the year then falling again at the end of the year. (AvgHomePriceLine.png)
-
-The second set of time series shows total number of jobs by sector (JobSector.png). Education, Business, and Trade are the top sectors in terms of number of jobs. Education also shows strong seasonal trends with summer months as school is not in session and there are less teaching jobs (EducationSector.png)
-
-The third set of plots relate to total jobs and the unemployment rate (UnempRateJob.png) there is a clear negative correlation between the total number of jobs and the unemployment rate. As the unemployment rate increases the total number of jobs decreases. When counting the number of observations for each unemployment rate we can see the rate stood the most months at 5.4 and 5.5% and ranged from 4.6 to 12.6 (URateSJ.png)
-
-Lastly, a final time series plotting average 30-year mortgage rates shows a historical fall in rates since 2008 that bottomed in late 2012 and have remained range bound between 3.5 and 4.5% since. This may have helped the rise in average home prices recently as lower rates create a more favorable lending environment for borrowers to purchase homes (Rates.png)
-
-
-```{r}
+```{r, echo=FALSE}
 library(ggplot2)
 library(ggthemes)
 library(tidyr)
 library(dplyr)
 
+```
+
+To start exploring the data set let's look at correlations between the variables. Rental prices, house prices, condo prices, jobs, and umeployment all are highly corrilated either positively or negatively as I would expect. The two variables that are the most interesting are rates and number of jobs. Rates refers to the average 30-year mortgage interest rate and number of jobs is tied to each job sector i.e. construction, business, finance. The positive or negative correlations are what you would expect but not as strong as some of the other variables. 
+
+```{r, echo=FALSE, results='asis'}
+library(knitr)
 # Looking at correlations 
-cor(clean_df[3:12], use="complete.obs")
+kable(cor(clean_df[3:12], use="complete.obs"))
+```
 
+Let's start plotting our data. First let's take a look at a time series of home prices. The data starts after the bottom of the financial crises and then there is a second drop in prices a few years after with a subsequent rebound in more recent years to pre-recession levels. There also seems to be a annual seasonal trend with prices rising in the beginning of the year then falling again at the end of the year. Plotting this out in a line graph its easier to see the yearly trend. I would expect home prices to rise during the most heavy buying months of the summer then drop off slighly when less people are buying homes in the winter months.
+
+```{r, echo=FALSE, message=FALSE}
 # Time series of avergae home prices
-ggplot(clean_df, aes(Date, AvgPriceHome/1000)) + geom_point() + geom_smooth()
+ggplot(clean_df, aes(Date, AvgPriceHome/1000)) + geom_point() + geom_smooth() + labs(title = "Price of Average Single Family Home", y = "Price ($1,000s)") + theme_economist()
+```
 
+```{r, echo=FALSE}
 # Time series of average home prices line, drop off at the end of each year. Best time to buy a home?
-ggplot(clean_df, aes(Date, AvgPriceHome)) + geom_line()
+ggplot(clean_df, aes(Date, AvgPriceHome/1000)) + geom_line() + labs(title = "Price of Average Single Family Home", y = "Price ($1,000s)") + theme_economist()
+```
 
+Home Prices Box Plot..(add commentary)
+```{r}
+ggplot(clean_df, aes(Month, AvgPriceHome/1000, group=Month, fill=Month)) + geom_boxplot() + theme_economist() + theme(legend.position="none") + labs(title = "Single Family Home Box Plot", y = "Price ($1,000s)")
+```
+
+The second set of time series shows total number of jobs by sector (JobSector.png). Education, Business, and Trade are the top sectors in terms of number of jobs. Education also shows strong seasonal trends with summer months as school is not in session and there are less teaching jobs (EducationSector.png)
+
+```{r, echo=FALSE}
 # Time series of jobs by sector 2008-2016
-ggplot(clean_df, aes(Date, NumJobs, col = JobSector)) + geom_point()
+ggplot(clean_df, aes(Date, NumJobs, col = JobSector)) + geom_line() + labs(y = "Number of Jobs") + theme_economist()
+```
 
+```{r, echo=FALSE}
 # Box plot of jobs by sector
-ggplot(data=clean_df, aes(x=JobSector, y=NumJobs, group=JobSector, fill=JobSector)) + geom_boxplot() + coord_flip() + guides(fill=FALSE)
+ggplot(data=clean_df, aes(x=JobSector, y=NumJobs, group=JobSector, fill=JobSector)) + geom_boxplot() + coord_flip() + guides(fill=FALSE) + theme_economist() + labs(x = "Job Sector", y = "Number of Jobs", title = "Job Sector Box Plot")
+```
 
+```{r, echo=FALSE}
 # Time series of Education sector jobs with visable seasonality
-ggplot(subset(clean_df, JobSector=="Education")) + geom_line(aes(Date, NumJobs, col = JobSector))
+ggplot(subset(clean_df, JobSector=="Education")) + geom_line(aes(Date, NumJobs, col = JobSector)) + theme_economist() + labs(title = "Education Jobs Sector", y = "Number of Jobs") + theme(legend.position="none")
+```
 
+The third set of plots relate to total jobs and the unemployment rate (UnempRateJob.png) there is a clear negative correlation between the total number of jobs and the unemployment rate. As the unemployment rate increases the total number of jobs decreases. When counting the number of observations for each unemployment rate we can see the rate stood the most months at 5.4 and 5.5% and ranged from 4.6 to 12.6 (URateSJ.png)
+
+```{r, echo=FALSE}
 # Histogram of San Jose unemployment rate
-ggplot(clean_df, aes(URateSJ, fill = cut(URateSJ, 25))) + geom_histogram(show.legend = FALSE, bins = 25) + scale_fill_discrete(h = c(240, 100))
+ggplot(clean_df, aes(URateSJ, fill = cut(URateSJ, 25))) + geom_histogram(show.legend = FALSE, bins = 25) + scale_fill_discrete(h = c(240, 100)) + theme_economist() + labs(x = "Unemployment Rate (%)", y = "Number of months", title = "Uneployment Rate Histogram")
+```
 
+Lastly, a final time series plotting average 30-year mortgage rates shows a historical fall in rates since 2008 that bottomed in late 2012 and have remained range bound between 3.5 and 4.5% since. This may have helped the rise in average home prices recently as lower rates create a more favorable lending environment for borrowers to purchase homes (Rates.png)
+
+```{r, echo=FALSE}
 # Time series of average 30-year mortage rates 
-ggplot(clean_df, aes(Date, Rates)) + geom_point() + geom_smooth()
-
+ggplot(clean_df, aes(Date, Rates)) + geom_point() + geom_smooth() + theme_economist() + labs(y = "Average 30-year Mortgage Rate (%)")
 ```
 
 ## Model Building
