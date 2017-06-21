@@ -14,6 +14,11 @@ linereg.rmse = sqrt(mean((linereg.pred - test$AvgPriceHome)^2))
 linereg.rmse
 # [1] 42637.19
 
+# K-fold cross validation for linear regression model
+library(DAAG)
+cv.lm(clean_df, linereg, m=3)
+# RMSE = 43458
+
 # create regression tree model
 treereg <- rpart(AvgPriceHome~AvgAptRent+URateSJ+Rates, data = train)
 prp(treereg)
