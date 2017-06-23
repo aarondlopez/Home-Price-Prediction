@@ -1,8 +1,10 @@
 library(rpart)
 library(rpart.plot)
 library(caTools)
+
 # Test models
 set.seed(123)
+
 # create test and train data sets
 split = sample.split(clean_df$AvgPriceHome, SplitRatio = 0.7)
 train = subset(clean_df, split==TRUE)
@@ -13,7 +15,6 @@ linereg.pred = predict(linereg, newdata = test)
 linereg.rmse = sqrt(mean((linereg.pred - test$AvgPriceHome)^2))
 linereg.rmse
 # [1] 42637.19
-
 # K-fold cross validation for linear regression model
 library(DAAG)
 cv.lm(clean_df, linereg, m=3)
@@ -26,7 +27,6 @@ treereg.pred = predict(treereg, newdata = test)
 treereg.rmse = sqrt(mean((treereg.pred - test$AvgPriceHome)^2))
 treereg.rmse
 # [1] 24843.1
-
 # cross validation using complexity parameter (cp)
 library(caret)
 library(e1071)
@@ -44,16 +44,6 @@ best.tree.pred = predict(treebest, newdata = test)
 best.tree.rmse = sqrt(mean((best.tree.pred - test$AvgPriceHome)^2))
 best.tree.rmse
 # [1] 3591.5
-
-# time-series model ARIMA models aim to describe the autocorrelations in the data, housing data is not stationary
-#ts <- xts(clean_df$AvgPriceHome, clean_df$Date)
-#fit <- auto.arima(ts, seasonal = F)
-#ts <- unique(ts)
-#fit <- auto.arima(ts, seasonal = F)
-#plot(forecast(fit))
-#accuracy(fit)
-#                   ME     RMSE      MAE        MPE     MAPE      MASE       ACF1
-# Training set 7.269227 25044.42 21148.19 -0.1386556 3.518458 0.9839578 0.06864566
 
 
 #### Time Series Model
@@ -130,6 +120,12 @@ accuracy(arima1.forecast,ts.test)
 # While the model isn't identifying seasonality well, the actual data (dotted black) is
 # in the (80% & 95%) confidence interval of the forecast
 
+
+
+
+#Get testing set from clean_df that matches our time series testing set (most recent data). 
+#Run predict models using the matching #data set, turn results into log then manually calculate RMSE. 
+#Find a way to print out prediction results so you can log then #match to time series logged test data set for the calculations.
 
 
 
