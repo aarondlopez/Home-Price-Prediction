@@ -282,7 +282,6 @@ cv.lm(clean_df, linereg, m=3)
 
 ### Tree Regression
 
-
 ```{r, echo=FALSE, message=FALSE, results="hide", warning=FALSE}
 # create regression tree model
 treereg <- rpart(AvgPriceHome~AvgAptRent+URateSJ+Rates, data = train)
@@ -316,6 +315,7 @@ best.tree.rmse
 # [1] 3591.5
 ```
 
+
 ### Time Series Analysis
 
 
@@ -324,6 +324,7 @@ best.tree.rmse
 library(xts)
 clean_df_construct = clean_df[clean_df$JobSector=='Construction',]
 #clean_df_construct$Date = as.Date(clean_df_construct$Date, "%m/%d/%Y")
+clean_df_construct <- clean_df_construct[(order(as.Date(clean_df_construct$Date))),]
 ts <- ts(clean_df_construct$AvgPriceHome, start=c(2009,8), frequency = 12)
 
 ts.train <- window(ts,start = c(2009,8),end = c(2014,12))
@@ -485,6 +486,19 @@ accuracy(arima2.forecast,ts.test)
 # get the same effect by merely unlogging or undeflating the error statistics themselves!
 
 
+```
+
+
+```{r}
+clean_df_ts_test <- clean_df_construct[66:77,]
+linereg.ts.pred <- predict(linereg, newdata = clean_df_ts_test)
+plot(linereg.ts.pred)
+```
+
+
+```{r}
+tree.ts.pred <- predict(treebest, newdata = clean_df_ts_test)
+plot(tree.ts.pred)
 ```
 
 
