@@ -282,6 +282,8 @@ cv.lm(clean_df, linereg, m=3)
 
 ### Tree Regression
 
+ADD COMMENTARY..
+
 ```{r, echo=FALSE, message=FALSE, results="hide", warning=FALSE}
 # create regression tree model
 treereg <- rpart(AvgPriceHome~AvgAptRent+URateSJ+Rates, data = train)
@@ -319,7 +321,7 @@ best.tree.rmse
 ### Time Series Analysis
 
 
-```{r}
+```{r, echo=FALSE, message=FALSE}
 # time-series model ARIMA models aim to describe the autocorrelations in the data, housing data is not stationary
 library(xts)
 clean_df_construct = clean_df[clean_df$JobSector=='Construction',]
@@ -403,7 +405,7 @@ accuracy(arima1.forecast,ts.test)
 ```
 
 
-```{r,}
+```{r,echo=FALSE, message=FALSE}
 # Let us assume the model to be multiplicative and take a log of the data
 ts <- ts(log10(clean_df_construct$AvgPriceHome), start=c(2009,8), frequency = 12)
 
@@ -474,29 +476,17 @@ accuracy(arima2.forecast,ts.test)
 
 # The root mean squared error and mean absolute error can only be compared between models whose errors are measured in the same units
 
-#(e.g., dollars, or constant dollars, or cases of beer sold, or whatever). 
-# If one model's errors are adjusted for inflation while those of another or not, 
-# or if one model's errors are in absolute units while another's are in logged units,
-#their error measures cannot be directly compared. 
-#In such cases, you have to convert the errors of both models into comparable units
-#before computing the various measures. This means converting the forecasts of one 
-#model to the same units as those of the other by unlogging or undeflating 
-# (or whatever), then subtracting those forecasts from actual values to obtain 
-# errors in comparable units, then computing statistics of those errors. You cannot
-# get the same effect by merely unlogging or undeflating the error statistics themselves!
-
-
 ```
 
 
-```{r}
+```{r, echo=FALSE, message=FALSE}
 clean_df_ts_test <- clean_df_construct[66:77,]
 linereg.ts.pred <- predict(linereg, newdata = clean_df_ts_test)
 plot(linereg.ts.pred)
 ```
 
 
-```{r}
+```{r, echo=FALSE, message=FALSE}
 tree.ts.pred <- predict(treebest, newdata = clean_df_ts_test)
 plot(tree.ts.pred)
 ```
