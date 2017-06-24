@@ -208,7 +208,7 @@ From the box plot above we can see home prices tend to be higher during the summ
 ggplot(clean_df, aes(Date, NumJobs, col = JobSector)) + geom_line() + labs(y = "Number of Jobs") + theme_economist()
 ```
 
-The second set of time series plots shows the total number of jobs by job sector. Education, Business, and Trade are the top sectors in terms of number of jobs. The education sector shows high yearly variation most likely due to teachers getting let go for the summer months when students aren't in school.
+The second set of time series plots shows the total number of jobs by job sector (see README file for long form job sector names). Education, Business, and Trade are the top sectors in terms of number of jobs. The education sector shows high yearly variation most likely due to teachers getting let go for the summer months when students aren't in school.
 
 ```{r, echo=FALSE, message=FALSE}
 # Box plot of jobs by sector
