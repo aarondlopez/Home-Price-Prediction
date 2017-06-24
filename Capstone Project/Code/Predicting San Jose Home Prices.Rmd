@@ -21,12 +21,12 @@ To predict near term median home prices I will use three different model approac
 
 The main source of data will be from the City of San Jose <http://data.sanjoseca.gov/home>. Economic and labor data including unemployment, total jobs, jobs by sector, median home prices, median rental prices will all be utilized along with broader economic data such as average mortgage rates from FRED <https://fred.stlouisfed.org/graph/?g=NUh#0>. The data set is approximately 6 years of monthly data from 2009-2015 after merging and cleaning up any missing values. There are 6 csv files all under the "Data" file. 
 
-apt_rents.csv
-home_prices.csv
-jobs_by_sector.csv
-mortgagerates.csv
-total_jobs.csv
-unemployment.csv
+apt_rents.csv  
+home_prices.csv  
+jobs_by_sector.csv  
+mortgagerates.csv  
+total_jobs.csv  
+unemployment.csv  
 
 San Jose provides relatively clean uniform data however it can be a little outdated and incomplete. I would have like to include crime data but this was missing at the time of my analysis and a time frame for requesting the data was uncertain. Including this information may be useful in further analyizing median home price trends.
 
