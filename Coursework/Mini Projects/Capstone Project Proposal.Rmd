@@ -1,0 +1,33 @@
+---
+title: "Capstone Project Proposal"
+author: "Aaron"
+date: "4/17/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### 1. Problem 
+
+  Affordable housing is a major concern in the Bay Area of California. Many people are priced out of affordable housing options where the median home price has reached close to $1 million. This trend impacts low and median income families looking to secure home ownership. Politicians and voters have voiced their concerns and willingness to address this issue by approving new policies at the ballot box. The current mayor of San Jose, Sam Liccardo, has said San Jose is facing an affordable housing crises.^1^ 
+
+### 2. Client
+
+  There are two major client groups. First, the city of San Jose who has made housing affordability a priority as the city continues to grow and city officials create urban planning policy. Politicians have expressed their desire to introduce an impliment policy to make housing more affordable for low and middle income residents. Understanding the trend and where housing prices are headed will help politicians determine what policy may be needed or developed. The second group of clients would be low and median income individuals seeking to find affordable housing and deciding when and if San Jose home price are affordable today or in the near future. This information can help them make an infored decision on when and if to purchase a home in the near future.  
+
+### 3. Data
+
+  The main source of data will be from the City of San Jose <http://data.sanjoseca.gov/home>. Economic and labor data including unemployment, total jobs, jobs by sector, median home prices, median rental prices will all be utilized along with broader economic data such as average mortgage rates from FRED <https://fred.stlouisfed.org/graph/?g=NUh#0>. The City of San Jose also keeps data on affordable housing units within the city that will be useful to incorporate if the data is complete and comprehensive. 
+
+### 4. Approach
+
+  My plan is to use all the above variables to predict short term median home prices and compare that to an affordability index as defined by the city of San Jose. I would also like to overlay implemented past policies by the city to determine if any benefical impact was recieved from those policies. 
+
+### 5. Deliverables
+
+  Deliverables will be code with descriptions in R Markdown and a slide deck summarizing the findings that may be used as a client friendly presentation.
+
+#### References
+1. <http://www.sanjoseca.gov/index.aspx?NID=5256>

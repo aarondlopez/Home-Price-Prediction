@@ -1,0 +1,29 @@
+---
+title: "Capstone Project Ideas"
+author: "Aaron Lopez"
+date: "4/5/2017"
+output: html_document
+---
+
+## Idea #1: Socially Responsible Investing
+
+* Issue: Socially responsible investing is becoming more and more popular. Does investing with a socially responsible lense make financial sense and can you do as good or better than the overall market.
+
+* Possible Questions: What are the best indices to use when evaluating socially responsible investments? How do they compare to the market overall? Can we expect performance to be the same or differ in the future? Are socially responsible indices good predictors of the overall market? 
+
+* Data: Publicly available historical price data for the below indices:
+    + Domini 400 Social Index
+    + Calvert Social Index
+    + FTSE4 Good US Index
+    + MSCI KLD 400 Index
+    + S&P 500 Index
+
+## Idea #2: City of San Jose Rental Prices
+
+* Issue: Rental prices continue to rise and affordable housing is becoming harder to find. 
+
+* Possible Questions: How affordable are San Jose rents? What is the definition of “affordable” housing? What are some of the trends in the San Jose market including, rental prices, supply of housing, new construction, crime, employment. How can we predict near term rental prices?
+
+* Data: <http://data.sanjoseca.gov/home>
+
+## Idea #3: tbd
