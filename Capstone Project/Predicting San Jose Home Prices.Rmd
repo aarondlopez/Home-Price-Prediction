@@ -19,7 +19,7 @@ To predict near term median home prices I will use three different model approac
   
 ## Data Set
 
-The main source of data will be from the City of San Jose <http://data.sanjoseca.gov/home>. Economic and labor data including unemployment, total jobs, jobs by sector, median home prices, median rental prices will all be utilized along with broader economic data such as average mortgage rates from FRED <https://fred.stlouisfed.org/graph/?g=NUh#0>. The data set is approximately 6 years of monthly data from 2009-2015 after merging and cleaning up any missing values. There are 6 csv files all under the "Data" file. 
+The main source of data will be from the City of [San Jose](http://data.sanjoseca.gov/home). Economic and labor data including unemployment, total jobs, jobs by sector, median home prices, median rental prices will all be utilized along with broader economic data such as average mortgage rates from [FRED](https://fred.stlouisfed.org/graph/?g=NUh#0). The data set is approximately 6 years of monthly data from 2009-2015 after merging and cleaning up any missing values. There are 6 csv files all under the "Data" file. 
 
 apt_rents.csv  
 home_prices.csv  
@@ -172,7 +172,7 @@ library(dplyr)
 ```
 
 To start exploring the data set let's look at correlations between the variables. Rental prices, house prices, condo prices, jobs, and umeployment all are highly corrilated either positively or negatively as one would expect. The two variables that are the most interesting are rates and number of jobs. Rates refers to the average 30-year mortgage interest rate and number of jobs is tied to each job sector i.e. construction, business, finance. The positive or negative correlations are what you would expect but not as strong as some of the other variables. 
-
+\pagebreak
 ```{r, echo=FALSE, message=FALSE}
 # Looking at correlations 
 cor(clean_df[3:12], use="complete.obs")
