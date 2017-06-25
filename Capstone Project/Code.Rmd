@@ -46,7 +46,7 @@ colnames(jobs_by_sector)[11] <- "Public"
 colnames(jobs_by_sector)[12] <- "Trade"
 
 # Changing dates from string to date format. as.Date returns NA for "Sept" 
-# abbreviation so first we'll change that to "Sep"
+# Abbreviation so first we'll change that to "Sep"
 jobs_by_sector$Date <- gsub("Sept", "Sep", jobs_by_sector$Date)
 # Adding a day
 jobs_by_sector$Date <- paste0("01.", jobs_by_sector$Date)
@@ -85,18 +85,18 @@ apt_rents$Date <- paste0("01/", apt_rents$Date)
 apt_rents$Date <- apt_rents$Date %>% 
     as.Date(format = "%d/%m/%Y", "%b/%d/%Y")
 
-# Cleaninging up mortgage rates with more consies variable names then date format
+# Cleaning up mortgage rates with more concise variable names then date format
 colnames(mortgagerates)[1] <- "Date"
 colnames(mortgagerates)[2] <- "Rates"
 mortgagerates$Date <- mortgagerates$Date %>% 
     as.Date(format = "%Y-%m-%d", "%b/%d/%Y")
 
-# Combine all data frames by date nd arranging in desending order
+# Combine all data frames by date and arranging in descending order
 clean_df <- join_all(list(jobs_by_sector,apt_rents,home_prices,total_jobs,
                           unemployment, mortgagerates), by="Date", type="left")
 clean_df <- arrange(clean_df, desc(Date))
 
-# Cleaning up some formating to convert data types to numeric by removing dollar 
+# Cleaning up some formatting to convert data types to numeric by removing dollar 
 # signs and commas
 clean_df$Condo.Townhome <- gsub("\\$|,", "", clean_df$Condo.Townhome)
 clean_df$Single.Family.Home <- gsub("\\$|,", "", clean_df$Single.Family.Home)
@@ -107,7 +107,7 @@ clean_df$Average <- gsub("*,", "", clean_df$Average)
 # Converting integers to numeric across variables
 clean_df[3:9] <- lapply(clean_df[3:9], as.numeric)
 
-# Converting job secotrs from characters to factors
+# Converting job sectors from characters to factors
 clean_df$JobSector <- as.factor(clean_df$JobSector)
 
 # Renaming variables with more descrptive concise names
@@ -123,7 +123,7 @@ colnames(clean_df)[11] <- "URateSJMetro"
 # Removing missing data
 clean_df <- na.omit(clean_df)
 
-# Adding a month variable for exploritory analyis
+# Adding a month variable for exploratory analysis
 month_prices <- c('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 
                   'Oct', 'Nov', 'Dec')
 clean_df$Month <- factor(format(clean_df$Date, "%b"), levels = month_prices)
@@ -136,7 +136,7 @@ str(clean_df)
 
 ```
 
-## Exporitory Analysis
+## Exploratory Analysis
 
 ```{r, echo=T, message=FALSE, results="hide", warning=FALSE, fig.keep='none'}
 library(ggplot2)
@@ -147,7 +147,7 @@ library(dplyr)
 # Looking at correlations 
 cor(clean_df[3:12], use="complete.obs")
 
-# Time series of avergae home prices
+# Time series of average home prices
 ggplot(clean_df, aes(Date, AvgPriceHome/1000)) + geom_point() + geom_smooth() + 
   labs(title = "Price of Average Single Family Home", y = "Price ($1,000s)") + theme_economist()
 
@@ -167,7 +167,7 @@ ggplot(data=clean_df, aes(x=JobSector, y=NumJobs, group=JobSector, fill=JobSecto
   geom_boxplot() + coord_flip() + guides(fill=FALSE) + theme_economist() + 
   labs(x = "Job Sector", y = "Number of Jobs", title = "Job Sector Box Plot")
 
-# Time series of Education sector jobs with visable seasonality
+# Time series of Education sector jobs with visible seasonality
 ggplot(subset(clean_df, JobSector=="Education")) + geom_line(aes(Date, NumJobs, col = JobSector)) + 
   theme_economist() + labs(title = "Education Jobs Sector", y = "Number of Jobs") + 
   theme(legend.position="none")
@@ -181,7 +181,7 @@ ggplot(clean_df, aes(URateSJ, fill = cut(URateSJ, 25))) + geom_histogram(show.le
 ggplot(clean_df, aes(Date, URateSJ)) + geom_line() + theme_economist() + 
   labs(title = "San Jose Unemployment Rate", y = "Unemployment Rate (%)")
 
-# Time series of average 30-year mortage rates 
+# Time series of average 30-year mortgage rates 
 ggplot(clean_df, aes(Date, Rates)) + geom_point() + geom_smooth() + theme_economist() + 
   labs(y = "Average 30-year Mortgage Rate (%)")
 
@@ -201,7 +201,7 @@ split <- sample.split(clean_df$AvgPriceHome, SplitRatio = 0.7)
 train <- subset(clean_df, split==TRUE)
 test <- subset(clean_df, split==FALSE)
 
-# Create linear regression model and determine its accuarcy on our test data set
+# Create linear regression model and determine its accuracy on our test data set
 linereg <- lm(AvgPriceHome~AvgAptRent+URateSJ+Rates, data = train)
 linereg.pred <- predict(linereg, newdata = test)
 linereg.rmse <- sqrt(mean((linereg.pred - test$AvgPriceHome)^2))
@@ -388,7 +388,7 @@ accuracy(arima2.forecast,ts.test)
 # The root mean squared error and mean absolute error can only be compared between 
 # models whose errors are measured in the same units
 
-# Time series data frame to calculate RMSE agains the linear and tree models
+# Time series data frame to calculate RMSE against the linear and tree models
 clean_df_ts_test <- clean_df_construct[66:77,]
 linereg.ts.pred <- predict(linereg, newdata = clean_df_ts_test)
 plot(linereg.ts.pred,xlab = "2015 (Months)", ylab = "Avg. Price of Homes", main = "Linear Model Predictions")
