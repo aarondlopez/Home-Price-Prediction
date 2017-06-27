@@ -388,13 +388,21 @@ accuracy(arima2.forecast,ts.test)
 # The root mean squared error and mean absolute error can only be compared between 
 # models whose errors are measured in the same units
 
-# Time series data frame to calculate RMSE against the linear and tree models
+# Created a time series data frame to calculate RMSE at log scale for the linear and tree models
 clean_df_ts_test <- clean_df_construct[66:77,]
+
+# Linear regression prediction using time series log scale test data
 linereg.ts.pred <- predict(linereg, newdata = clean_df_ts_test)
 plot(linereg.ts.pred,xlab = "2015 (Months)", ylab = "Avg. Price of Homes", main = "Linear Model Predictions")
+linereg.ts.rmse <- sqrt(mean((log10(linereg.ts.pred) - ts.test)^2))
+linereg.ts.rmse
+# RMSE [1] 0.0122058 at log scale to compare to time series model
 
+# Tree regression prediction using time series log scale test data
 tree.ts.pred <- predict(treebest, newdata = clean_df_ts_test)
 plot(tree.ts.pred,xlab = "2015 (Months)", ylab = "Avg. Price of Homes", main = "Tree Model Predictions")
-
+treereg.ts.rmse <- sqrt(mean((log10(tree.ts.pred) - ts.test)^2))
+treereg.ts.rmse
+# RMSE [1] 0.001140544 at log scale to compare to time series model
 ```
 
