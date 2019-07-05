@@ -142,7 +142,6 @@ library(dplyr)
 
 To start exploring the data set let's look at correlations between the variables. Rental prices, house prices, condo prices, jobs, and unemployment all are highly correlated either positively or negatively, as one would expect. The two variables that are the most interesting are "Rates" and "NumJobs". "Rates" refers to the average 30-year mortgage interest rate and "NumJobs" is the number of jobs tied to each job sector i.e. construction, business, finance, etc. The positive or negative correlations are what you would expect but not as strong as some of the other variables.
 
-\pagebreak
 
 ```{r, echo=FALSE, message=FALSE}
 # Looking at correlations 
